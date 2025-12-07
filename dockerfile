@@ -1,5 +1,5 @@
 # -- Base Stage (共通の土台) --
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 WORKDIR /app
 
 # Next.jsをDockerをalpineで動かすための必須ライブラリ
@@ -32,7 +32,7 @@ RUN npm run build
 # -- Production Stage (本番用) --
 FROM base AS runner
 WORKDIR /app
-ENV NODE_ENV production
+ENV NODE_ENV=production
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/.next/standalone ./
