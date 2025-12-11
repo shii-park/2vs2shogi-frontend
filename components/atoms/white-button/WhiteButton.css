@@ -1,0 +1,20 @@
+button {
+    font-size: 2rem;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: #C59E70;
+    padding: 0.25rem 2rem;
+    background-color: #fff;
+    border-color: #fff;
+    border-radius: 2rem;
+
+    cursor: pointer;
+}
+
+button:hover {
+  background-color: #d6d5d5;
+}
+
+button:active {
+  transform: scale(0.95);
+}
