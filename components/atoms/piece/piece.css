@@ -1,0 +1,15 @@
+.piece {
+    transition-duration: 0.2s;
+}
+
+.piece.ally.selectable:hover {
+    transform: scale(1.15);
+}
+
+.piece.selected{
+    transform: scale(1.15);
+}
+
+.piece.ally.not-selected{
+    filter: grayscale(100%);
+}
