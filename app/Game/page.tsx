@@ -1,6 +1,6 @@
 "use client";
 import { InitialPieces } from "@/constants/InitialTest";
-import { BoradDraw } from "@/components/molecules/board/board"
+import { BoardDraw } from "@/components/molecules/board/board"
 import { useEffect, useState } from "react";
 import { PieceType } from "@/types/PieceType";
 import { BoardMapKey } from "@/types/BoardMapType";
@@ -14,7 +14,7 @@ export default function Game() {
     
     return(
         <div>
-          <BoradDraw/>
+          <BoardDraw/>
         </div>
     );
 }

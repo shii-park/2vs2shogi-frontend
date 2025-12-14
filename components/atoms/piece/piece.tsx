@@ -14,7 +14,7 @@ export function PieceDraw({p, isSelectable, isSelected, onClick}: Props) {
     return (<Image  src={getPieceImgPath({team: p.team, type: p.type, promoted: p.promoted,})}
                     alt={p.type}
                     className={`piece 
-                                ${p.team}
+                                {/* チーム別クラスをここに入れる予定 */}
                                 ${isSelected && "selected"}
                                 ${isSelectable && "selectable"}
                                 ${!isSelectable && !isSelected ? "not-selected": ""}

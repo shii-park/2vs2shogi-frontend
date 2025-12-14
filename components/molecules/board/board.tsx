@@ -6,7 +6,7 @@ type Props = {
     
 }
 
-export function BoradDraw() {
+export function BoardDraw() {
     // 座標ループ用配列
     const board = [];
 
