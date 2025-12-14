@@ -1,5 +1,5 @@
 "use client";
-import { useGameState } from "@/hooks/useGameState";
+import { useGameState } from "@/hooks/useBoardState";
 
 
 export default function Game() {
@@ -12,9 +12,9 @@ export default function Game() {
         initializeGameState,
     } = useGameState();
 
-    return(
+    return (
         <div>
-            
+
         </div>
     );
 }

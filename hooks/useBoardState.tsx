@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import type { PieceType } from "@/types/PieceType";
-import type { BoardKey, HandKey } from "@/types/BoardType";
+import type { BoardKey, HandKey } from "@/types/MapType";
 import { getBoradKey } from "@/utils/BoardMapUtils";
 
 export function useGameState() {
@@ -22,13 +22,19 @@ export function useGameState() {
         setBoardMap(prevBoard => {
             const key_from = findBoardKey(piece, prevBoard);
             const key_to = getBoradKey(x_to, y_to);
-            if (!key_from || key_from === key_to) return prevBoard;
+            if (!key_from || key_from === key_to) {
+                console.log(`Error:${prevBoard}に${piece}が存在しない、または${key_to}と${key_from}が等しいです`)
+                return prevBoard;
+            }
 
             // BoardMapのコピーnextBoardMapを作成し更新
             const nextBoardMap = new Map(prevBoard);
             const stack_from = nextBoardMap.get(key_from) ?? [];
             // キーのスタックがないときは、元のmapで更新
-            if (stack_from.length === 0) return prevBoard;
+            if (stack_from.length === 0) {
+                console.log(`Error:キー${key_from}に${piece}は存在しません`)
+                return prevBoard;
+            }
 
             // stack_fromから最後の要素をpop
             const popped: PieceType = stack_from[stack_from.length - 1];
@@ -44,15 +50,21 @@ export function useGameState() {
     // 駒を取る関数
     const Capture = useCallback((piece: PieceType) => {
         const key_from = findBoardKey(piece, boardMap);
-        if (!key_from) return;
+        // 動かしたteamと取る駒のteamが異なるか確認すべきかも
+        if (!key_from) {
+            console.log(`Error:キー${key_from}に${piece}は存在しません`)
+            return;
+        }
         const key_to = piece.team === "first" ? "second" : "first";
 
         // BoardMapのコピーnextBoardMapを作成し更新
         const nextBoardMap = new Map(boardMap);
         const stack_from = nextBoardMap.get(key_from) ?? [];
         // キーのスタックがないときは、更新しない
-        if (stack_from.length === 0) return;
-
+        if (stack_from.length === 0) {
+            console.log(`Error:キー${key_from}に駒が存在しません`)
+            return;
+        }
         // stack_fromから全要素をpop
         const popped: PieceType[] = stack_from;
         nextBoardMap.set(key_from, []);
@@ -61,7 +73,8 @@ export function useGameState() {
         const stack_to = nextHandMap.get(key_to) ?? [];
         const capturedPieces = popped.map(p => ({
             ...p,
-            team: key_to as "first" | "second" // popしたPieceType.teamをkey_to
+            team: key_to as "first" | "second", // popしたPieceType.teamをkey_toに変更
+            promoted: false,    // 成っているかをfalseに変更
         }));
         nextHandMap.set(key_to, [...stack_to, ...capturedPieces])
 
@@ -73,12 +86,16 @@ export function useGameState() {
     const Drop = useCallback((x_to: number, y_to: number, piece: PieceType) => {
         const key_from = piece.team;
         const stack_from = handMap.get(key_from) ?? [];
-        if (stack_from?.length === 0)return;
-
+        if (stack_from?.length === 0) {
+            console.log(`Error:${key_from}には持ち駒がありません`)
+            return;
+        }
         // stack_fromからpieceのインデックスを探す
         const targetIndex = stack_from.findIndex(p => p === piece);
-        if (targetIndex === -1) return;
-
+        if (targetIndex === -1) {
+            console.log(`Error:${key_from}には持ち駒に${piece}はありません`)
+            return;
+        }
         // 持ち駒stackから打つ駒を削除し、nextHandMapに更新
         const nextHandStack = [...stack_from];
         nextHandStack.splice(targetIndex, 1);
