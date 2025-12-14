@@ -1,13 +1,10 @@
 "use client";
-import { WhiteButton } from "@/components/atoms/white-button/page";
+import Link from "next/link";
 
 export default function Page() {
   return (
     <div>
-      <WhiteButton
-        label="確定"
-        onClick={() => console.log("click!!")}
-      />
+      <Link href="/game">ゲームページテスト</Link>
     </div>
   );
 }

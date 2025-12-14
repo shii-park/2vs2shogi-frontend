@@ -1,0 +1,13 @@
+王 : king
+玉 : king2
+金 : gold
+銀 : silver
+桂馬 : knight
+香車 : lance
+飛車 : rook
+角 : bishop
+歩 : pawn
+
+成り
+prom_~
+
