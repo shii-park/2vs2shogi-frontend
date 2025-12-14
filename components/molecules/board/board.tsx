@@ -2,9 +2,6 @@ import './board.css'
 import { MasuDraw } from '../../atoms/masu/masu';
 import { board_property } from '@/constants/BoardProperty';
 
-type Props = {
-    
-}
 
 export function BoardDraw() {
     // 座標ループ用配列
