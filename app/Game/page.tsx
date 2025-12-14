@@ -9,6 +9,7 @@ export default function Game() {
         Move,
         Capture,
         Drop,
+        initializeGameState,
     } = useGameState();
 
     return(
