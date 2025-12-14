@@ -7,6 +7,15 @@ export function useGameState() {
     const [boardMap, setBoardMap] = useState<Map<BoardKey, PieceType[]>>(() => new Map());  // 盤面map
     const [handMap, setHandMap] = useState<Map<HandKey, PieceType[]>>(() => new Map())  // 持ち駒map
 
+    // BoardMapの要素のPieceTypeを探し、キーを返す関数
+    const findBoardKey = (piece: PieceType, prevBoard: Map<BoardKey, PieceType[]>): BoardKey | undefined => {
+        const foundEntry = Array.from(prevBoard.entries()).find(([key, stack]) => {
+            return stack.length > 0 && stack[stack.length - 1] === piece;
+        });
+        // fondEntryがあればキーを返す
+        return foundEntry ? foundEntry[0] : undefined;
+    };
+    
     // 盤面・持ち駒状態を一括設定する関数(初期化・復帰用)
     const initializeGameState = useCallback((
         newBoard: Map<BoardKey, PieceType[]>,
@@ -111,15 +120,6 @@ export function useGameState() {
         setHandMap(nextHandMap);
         setBoardMap(nextBoardMap);
     }, [boardMap, handMap]);
-
-    // BoardMapの要素のPieceTypeを探し、キーを返す関数
-    const findBoardKey = (piece: PieceType, prevBoard: Map<BoardKey, PieceType[]>): BoardKey | undefined => {
-        const foundEntry = Array.from(prevBoard.entries()).find(([key, stack]) => {
-            return stack.length > 0 && stack[stack.length - 1] === piece;
-        });
-        // fondEntryがあればキーを返す
-        return foundEntry ? foundEntry[0] : undefined;
-    };
 
     return {
         boardMap,
