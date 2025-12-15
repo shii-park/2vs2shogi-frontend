@@ -5,7 +5,7 @@ type Props = {
     y: number;
     isSelectable: boolean;    // マス選択状態
     isMovable: boolean;       // マスが移動可能かどうか
-    onClick: () => void;        // マス選択時の関数
+    onClick: (movable: boolean) => void;        // マス選択時の関数
 };
 
 export function MasuDraw({x, y, isSelectable, isMovable, onClick}: Props){
@@ -13,7 +13,7 @@ export function MasuDraw({x, y, isSelectable, isMovable, onClick}: Props){
                             ${isSelectable && isMovable ? "movable" : ""} 
                             ${isSelectable && !isMovable ? "not-movable" : ""}
                             `}
-                onClick={onClick}
+                onClick={() => onClick(isMovable)}
                 role="button">
             </div>
 }

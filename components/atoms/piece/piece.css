@@ -2,14 +2,17 @@
     transition-duration: 0.2s;
 }
 
-.piece.ally.selectable:hover {
+/* 味方の駒 || この駒が選択されている */
+.isSelected{
     transform: scale(1.15);
 }
 
-.piece.selected{
+/* 味方の駒 || 選択可能 || 他に駒が選択されていない */
+.ally.selectable.noneSelected:hover {
     transform: scale(1.15);
 }
 
-.piece.ally.not-selected{
+/* 味方の駒 || 他に駒が選択されている */
+.ally.otherSelected {
     filter: grayscale(100%);
 }
