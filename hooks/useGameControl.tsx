@@ -1,16 +1,15 @@
 import { GamePhase, Team } from "@/types/GameStates";
-import { BoardKey } from "@/types/MapType";
 import { PieceType } from "@/types/PieceType";
 import { useCallback, useState } from "react";
 
-export function useGameControl (myTeam: Team) {
+export function useGameControl(myTeam: Team) {
     const [currentTurn, setcurrentTurn] = useState<Team>("first");  // 現在の手番
     const [phase, setPhase] = useState<GamePhase>(
         myTeam === "first" ? "selecting_piece" : "waiting_opp"
     );  // 現在のフェーズ
     const [isSelectedPiece, setIsSelectedPiece] = useState<PieceType | null>(null); //選択している駒
-    const [pendingDest, setPendingDest] = useState<{x: number, y: number} | null>(null);    //移動先の保留
-    
+    const [pendingDest, setPendingDest] = useState<{ x: number, y: number } | null>(null);    //移動先の保留
+
     // 駒の選択時処理
     const selectPiece = useCallback((piece: PieceType) => {
         // 自分のターンかつ、「駒選択フェーズ」または「マス選択フェーズ」であるか
@@ -34,15 +33,15 @@ export function useGameControl (myTeam: Team) {
             setIsSelectedPiece(null);
             setPhase("selecting_piece");
         }
-    }, [phase]);    
+    }, [phase]);
 
     // 移動先のマス選択処理
     const selectDest = useCallback((x: number, y: number) => {
         // 移動先選択フェーズであるか
         if (phase !== "selecting_dest") return;
-        
+
         // 移動先を保留にして、フェーズを更新
-        setPendingDest({x, y});
+        setPendingDest({ x, y });
         setPhase("confirming");
     }, [phase]);
 
@@ -73,15 +72,16 @@ export function useGameControl (myTeam: Team) {
         return moveDate;
     }, [phase, isSelectedPiece, pendingDest])
 
+
     // ターン終了処理
     const turnEnd = useCallback(() => {
         // ターンの切り替え
         setcurrentTurn(currentTurn === "first" ? "second" : "first");
 
         // フェーズの切り替え
-        if (currentTurn === myTeam){
+        if (currentTurn === myTeam) {
             setPhase("selecting_piece");
-        }else{
+        } else {
             setPhase("waiting_opp");
         }
     }, [phase, myTeam]);
@@ -104,6 +104,7 @@ export function useGameControl (myTeam: Team) {
         selectDest,
         cancelPending,
         confirmMmove,
-
+        turnEnd,
+        gameEnd,
     }
 }
