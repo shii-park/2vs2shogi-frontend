@@ -1,13 +1,15 @@
 import type { BoardKey, BoardMapType } from "@/types/MapType"
 import { PieceType } from "@/types/PieceType"
-import { PieceMovableVector } from "@/constants/PieceMovableVecotr"
+import { PieceMovableVector } from "@/constants/PieceMovableVector"
 import { boardProperty } from "@/constants/BoardProperty"
 
 // indexからボードマップのキーを返す関数
-export const getBoradKey = (x: number, y: number): BoardKey => { return `${x}_${y}` as BoardKey}
+export const getBoardKey = (x: number, y: number): BoardKey => { return `${x}_${y}` as BoardKey}
 
 // 駒とmapから、移動可能なマスを計算する関数
 export const getMovableMasu = (boardMap: BoardMapType, current_x: number, current_y: number, piece: PieceType): [number, number][] => {
+    // 返り値用配列
+    const movableMasu: [number, number][] = [];
 
     // 座標が盤面内であるか
     const isValidPosition = (x: number, y: number): boolean => {
@@ -22,7 +24,7 @@ export const getMovableMasu = (boardMap: BoardMapType, current_x: number, curren
             
             // 駒にぶつかる、盤面から出るまでループ
             while(isValidPosition(next_x, next_y)){
-                const stack = boardMap.get(getBoradKey(next_x, next_y)) ?? [];
+                const stack = boardMap.get(getBoardKey(next_x, next_y)) ?? [];
                 
                 // スタックがあるとき
                 if(stack.length !== 0){
@@ -31,12 +33,12 @@ export const getMovableMasu = (boardMap: BoardMapType, current_x: number, curren
                     if (topStack.team === piece.team)break;
                     // 敵の駒であれば、追加してループを抜ける
                     else {
-                        movableMasus.push([next_x, next_y]);
+                        movableMasu.push([next_x, next_y]);
                         break;
                     }
                 }else{
                 // スタックがないとき
-                    movableMasus.push([next_x, next_y]);
+                    movableMasu.push([next_x, next_y]);
                 }
                 // マス座標更新
                 next_x += dx;
@@ -44,9 +46,6 @@ export const getMovableMasu = (boardMap: BoardMapType, current_x: number, curren
             }    
         });
     };
-
-    // 返り値用配列
-    const movableMasus: [number, number][] = [];
 
     // 移動可能ベクトルを取得
     const [movableVectors, movableSlideVectors] = PieceMovableVector(piece.type, piece.promoted);
@@ -65,11 +64,11 @@ export const getMovableMasu = (boardMap: BoardMapType, current_x: number, curren
         if (!isValidPosition(Masu[0], Masu[1])) return;
 
         // キーからマップのスタックを取得
-        const boardKey = getBoradKey(Masu[0], Masu[1]);
+        const boardKey = getBoardKey(Masu[0], Masu[1]);
         const boardStack = boardMap.get(boardKey) ?? [];
         // スタックが空、またはスタックのtopが相手の駒のとき、返り値に追加
-        if (boardStack.length === 0 || boardStack[boardStack.length - 1].team !== piece.team) movableMasus.push(Masu)
+        if (boardStack.length === 0 || boardStack[boardStack.length - 1].team !== piece.team) movableMasu.push(Masu)
     })
 
-    return movableMasus;
+    return movableMasu;
 }

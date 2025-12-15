@@ -3,7 +3,7 @@ import { MasuDraw } from '../../atoms/masu/masu';
 import { PieceDraw } from '@/components/atoms/piece/piece';
 import { boardProperty } from '@/constants/BoardProperty';
 import { BoardMapType, BoardKey, HandMapType, HandKey } from '@/types/MapType';
-import { getBoradKey } from '@/utils/BoardMapUtils';
+import { getBoardKey } from '@/utils/BoardMapUtils';
 import { GamePhase, Team } from '@/types/GameStates';
 import { PieceType } from '@/types/PieceType';
 
@@ -11,41 +11,50 @@ type Props = {
     BoardMap: BoardMapType;
     phase: GamePhase;
     isSelectedPiece: PieceType | null;
+    movableMasu: [number, number][];
     myTeam: Team;
 
-    selectPiece: (piece: PieceType) => void;
+    selectPiece: (piece: PieceType, x: number, y: number) => void;
     cancelSelectedPiece: () => void;
-
+    selectDest: (x: number, y: number) => void;
 }
 
-export function BoardDraw({BoardMap, phase, isSelectedPiece, myTeam, selectPiece,cancelSelectedPiece}: Props) {
+export function BoardDraw({ BoardMap, phase, isSelectedPiece, movableMasu, myTeam, selectPiece, cancelSelectedPiece, selectDest }: Props) {
     // 駒クリック関数
-    const handlePieceClick = (piece: PieceType) => {
+    const handlePieceClick = (x: number, y: number, piece: PieceType) => {
         // フェーズの例外処理
-        if (phase !== "selecting_dest" && phase !== "selecting_piece")return;
-        
-        // 敵の駒をクリックした場合、選択解除
-        if (piece.team !== myTeam){
-            cancelSelectedPiece();
-            return;
+        if (phase !== "selecting_dest" && phase !== "selecting_piece") return;
+
+        // 敵の駒をクリックかつ、マス選択フェーズのときした場合、
+        if (piece.team !== myTeam && phase === "selecting_dest") {
+            // クリックした駒が取れるのか判定
+            const capturable = movableMasu.some(([cx, cy]) => cx === x && cy === y);
+            if (capturable) {
+                // マスの一時保存
+                selectDest(x, y);
+                // ここでgame/pageの移動・成り確認画面の表示関数
+            }
+            else {
+                cancelSelectedPiece();
+                return;
+            }
         }
 
         // 前の選択した駒と比較して同じであれば選択キャンセル
-        if (isSelectedPiece === piece){
+        if (isSelectedPiece === piece) {
             cancelSelectedPiece();
             return;
-        }else{
-        // 異なる場合は駒をセット
-            selectPiece(piece);
-            // ここで移動可能マスを更新
+        } else {
+            // 異なる場合は駒をセット
+            selectPiece(piece, x, y);
             return;
         }
-    } 
+    }
 
     // マスクリック関数
-    const handleMasuClick = (movable: boolean) => {
+    const handleMasuClick = (movable: boolean, x: number, y: number) => {
         // フェーズの例外処理
-        if (phase !== "selecting_dest")return;
+        if (phase !== "selecting_dest") return;
 
         // 移動可能マスでないなら、駒選択を解除
         if (!movable) {
@@ -53,6 +62,9 @@ export function BoardDraw({BoardMap, phase, isSelectedPiece, myTeam, selectPiece
             return;
         }
 
+        // マスの一時保存
+        selectDest(x, y);
+        // ここでgame/pageの移動・成り確認画面の表示関数
 
     }
 
@@ -63,19 +75,21 @@ export function BoardDraw({BoardMap, phase, isSelectedPiece, myTeam, selectPiece
         for (let x = 0; x <= boardProperty.boardWidth; x++) {
 
             //ここにboardmapのキー`x_y`からスタック取得
-            const cellKey: BoardKey = getBoradKey(x, y);
+            const cellKey: BoardKey = getBoardKey(x, y);
             const cellStack = BoardMap.get(cellKey) ?? [];
             // スタックの一番上の駒を取得
             const topPiece = cellStack[cellStack.length - 1];
 
+            // x,yのマスが移動可能かどうか
+            const isMovable = movableMasu.some(([cx, cy]) => cx === x && cy === y);
+
             board.push(
-                <div>
+                <div key={`${x}-${y}`}>
                     <MasuDraw
-                        key={`${x}-${y}`}
                         x={x} y={y}
-                        isSelectable={false}
-                        isMovable={false}
-                        onClick={() => { console.log("マスclick!") }}
+                        phase={phase}
+                        isMovable={isMovable}
+                        onClick={() => { handleMasuClick(isMovable, x, y) }}
                     />
 
                     {/* topPieceが存在するときのみ、PieceDraw*/}
@@ -86,7 +100,7 @@ export function BoardDraw({BoardMap, phase, isSelectedPiece, myTeam, selectPiece
                             phase={phase}
                             isSelectedPiece={isSelectedPiece}
                             myTeam={myTeam}
-                            onClick={() => {handlePieceClick}}
+                            onClick={() => { handlePieceClick(x, y, topPiece) }}
                         />
                     )}
                 </div>
