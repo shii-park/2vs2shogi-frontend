@@ -1,15 +1,23 @@
 .piece {
+    /* 絶対配置で浮かせ、中央に配置する */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 自身のサイズ半分だけずらして完全中央揃え */
+    z-index: 10; /* マスより手前に表示 */
+
     transition-duration: 0.2s;
+    pointer-events: auto; /* ポインタイベントの有効化 */
 }
 
 /* 味方の駒 || この駒が選択されている */
 .isSelected{
-    transform: scale(1.15);
+    transform: translate(-50%, -50%) scale(1.2);
 }
 
 /* 味方の駒 || 選択可能 || 他に駒が選択されていない */
 .ally.selectable.noneSelected:hover {
-    transform: scale(1.15);
+    transform: translate(-50%, -50%) scale(1.2);
 }
 
 /* 味方の駒 || 他に駒が選択されている */

@@ -8,6 +8,14 @@
 
 }
 
+.boardCell {
+  position: relative; /* 駒の絶対配置の基準 */
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   min-height: 100vh;
   display: flex;

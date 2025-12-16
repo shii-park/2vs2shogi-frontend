@@ -84,7 +84,7 @@ export function BoardDraw({ BoardMap, phase, isSelectedPiece, movableMasu, myTea
             const isMovable = movableMasu.some(([cx, cy]) => cx === x && cy === y);
 
             board.push(
-                <div key={`${x}-${y}`}>
+                <div className="boardCell" key={`${x}-${y}` }>
                     <MasuDraw
                         x={x} y={y}
                         phase={phase}

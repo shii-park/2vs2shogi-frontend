@@ -1,7 +1,7 @@
 import { type HandKey, type BoardKey, type BoardMapType, type HandMapType } from "@/types/MapType";
 import type { PieceType } from "@/types/PieceType";
 import { InitialPieces } from "@/constants/InitialTest";
-import { getBoradKey } from "@/utils/BoardMapUtils";
+import { getBoardKey } from "@/utils/BoardMapUtils";
 import { useGameState } from "@/hooks/useBoardState";
 import { useEffect } from "react";
 
@@ -16,8 +16,8 @@ export function GameStateTest() {
     } = useGameState();
 
     const initializeBoardMap: BoardMapType = new Map<BoardKey, PieceType[]>();
-    initializeBoardMap.set(getBoradKey(0, 0), [InitialPieces[0]]);
-    initializeBoardMap.set(getBoradKey(0, 1), [InitialPieces[1]]);
+    initializeBoardMap.set(getBoardKey(0, 0), [InitialPieces[0]]);
+    initializeBoardMap.set(getBoardKey(0, 1), [InitialPieces[1]]);
     const initializeHandMap: HandMapType = new Map<HandKey, PieceType[]>();
 
     useEffect(() => {

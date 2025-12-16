@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import type { PieceType } from "@/types/PieceType";
-import type { BoardKey, HandKey } from "@/types/MapType";
+import type { BoardKey, BoardMapType, HandKey, HandMapType } from "@/types/MapType";
 import { getBoardKey } from "@/utils/BoardMapUtils";
 
 export function useGameState() {
@@ -18,8 +18,8 @@ export function useGameState() {
     
     // 盤面・持ち駒状態を一括設定する関数(初期化・復帰用)
     const initializeGameState = useCallback((
-        newBoard: Map<BoardKey, PieceType[]>,
-        newHand: Map<HandKey, PieceType[]>
+        newBoard: BoardMapType,
+        newHand: HandMapType
     ) => {
         // 念のため、新しいMapとしてセット
         setBoardMap(new Map(newBoard));
