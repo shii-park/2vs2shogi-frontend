@@ -3,7 +3,7 @@ import { MasuDraw } from '../../atoms/masu/masu';
 import { PieceDraw } from '@/components/atoms/piece/piece';
 import { boardProperty } from '@/constants/BoardProperty';
 import { BoardMapType, BoardKey, HandMapType, HandKey } from '@/types/MapType';
-import { getBoardKey } from '@/utils/BoardMapUtils';
+import { canPromote, getBoardKey } from '@/utils/BoardMapUtils';
 import { GamePhase, Team } from '@/types/GameStates';
 import { PieceType } from '@/types/PieceType';
 
@@ -11,6 +11,7 @@ type Props = {
     BoardMap: BoardMapType;
     phase: GamePhase;
     isSelectedPiece: PieceType | null;
+    selectedPos: { x: number, y: number } | null;
     movableMasu: [number, number][];
     myTeam: Team;
 
@@ -19,7 +20,7 @@ type Props = {
     selectDest: (x: number, y: number) => void;
 }
 
-export function BoardDraw({ BoardMap, phase, isSelectedPiece, movableMasu, myTeam, selectPiece, cancelSelectedPiece, selectDest }: Props) {
+export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movableMasu, myTeam, selectPiece, cancelSelectedPiece, selectDest }: Props) {
     // 駒クリック関数
     const handlePieceClick = (x: number, y: number, piece: PieceType) => {
         // フェーズの例外処理
@@ -83,12 +84,22 @@ export function BoardDraw({ BoardMap, phase, isSelectedPiece, movableMasu, myTea
             // x,yのマスが移動可能かどうか
             const isMovable = movableMasu.some(([cx, cy]) => cx === x && cy === y);
 
+            // 成れるマスかどうか
+            const isPromotable = !!(
+                isMovable &&
+                isSelectedPiece &&
+                selectedPos &&
+                canPromote(myTeam, selectedPos.y, y, isSelectedPiece)
+            );
+
             board.push(
-                <div className="boardCell" key={`${x}-${y}` }>
+                <div className="boardCell" key={`${x}-${y}`}>
                     <MasuDraw
                         x={x} y={y}
                         phase={phase}
                         isMovable={isMovable}
+                        isSelectedPiece={isSelectedPiece}
+                        isPromotable={isPromotable}
                         onClick={() => { handleMasuClick(isMovable, x, y) }}
                     />
 

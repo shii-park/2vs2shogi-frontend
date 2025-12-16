@@ -10,8 +10,18 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         myTeam === "first" ? "selecting_piece" : "waiting_opp"
     );  // 現在のフェーズ
     const [isSelectedPiece, setIsSelectedPiece] = useState<PieceType | null>(null); //選択している駒
-    const [pendingDest, setPendingDest] = useState<{ x: number, y: number } | null>(null);    //移動先の保留
+    const [selectedPos, setSelectedPos] = useState<{ x: number, y: number } | null>(null);      //選択している駒の座標
+    const [pendingDest, setPendingDest] = useState<{ x: number, y: number } | null>(null);      //移動先の保留
     const [movableMasu, setMovableMasu] = useState<[number, number][]>([]); // 移動可能マス配列
+
+    // 状態クリア関数
+    const stateClear = useCallback(() => {
+        // 状態クリア
+        setIsSelectedPiece(null);
+        setSelectedPos(null);
+        setMovableMasu([]);
+        setPendingDest(null);   
+    }, [])
 
     // 駒の選択時処理
     const selectPiece = useCallback((piece: PieceType, x: number, y: number) => {
@@ -27,6 +37,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
 
         // 駒をセットし、フェーズを更新
         setIsSelectedPiece(piece);
+        setSelectedPos({x, y});
         setPhase("selecting_dest");
 
         // 移動可能マスを受け取り代入
@@ -36,8 +47,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
     // 駒の選択キャンセル(同じ駒を押したとき、画面の何もないことろを押したとき)
     const cancelSelectedPiece = useCallback(() => {
         if (phase === "selecting_dest") {
-            setIsSelectedPiece(null);
-            setMovableMasu([]);
+            stateClear();
             setPhase("selecting_piece");
         }
     }, [phase]);
@@ -75,9 +85,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         };
 
         // 状態クリア
-        setIsSelectedPiece(null);
-        setMovableMasu([]);
-        setPendingDest(null);
+        stateClear();
 
         // フェーズの変更、移動データを返す
         setPhase("waitAlly");
@@ -99,9 +107,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         }
 
         // 念のため選択状態などをリセット
-        setIsSelectedPiece(null);
-        setMovableMasu([]);
-        setPendingDest(null);
+        stateClear();
     }, [currentTurn, myTeam]);
 
     // ゲーム終了処理(投了、王を取る・取られる等)
@@ -114,6 +120,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         currentTurn,
         phase,
         isSelectedPiece,
+        selectedPos,
         pendingDest,
         movableMasu,
         isMyTurn: currentTurn === myTeam,

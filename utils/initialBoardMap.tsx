@@ -53,10 +53,10 @@ export const createInitialBoardMap = (): BoardMapType => {
     placePiece(1, 1, "bishop", "first");
     placePiece(7, 1, "rook", "first");
 
-    // y=2: 歩
-    for (let x = 0; x < 9; x++) {
-        placePiece(x, 2, "pawn", "first");
-    }
+    // // y=2: 歩
+    // for (let x = 0; x < 9; x++) {
+    //     placePiece(x, 2, "pawn", "first");
+    // }
 
     // --- 後手 (Second: 上側 y=8,7,6) ---
 

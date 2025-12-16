@@ -21,6 +21,7 @@ export default function Game() {
         currentTurn,
         phase,
         isSelectedPiece,
+        selectedPos,
         pendingDest,
         movableMasu,
         isMyTurn,
@@ -44,6 +45,7 @@ export default function Game() {
                 BoardMap={boardMap}
                 phase={phase}
                 isSelectedPiece={isSelectedPiece}
+                selectedPos={selectedPos}
                 movableMasu={movableMasu}
                 myTeam={myTeam}
 

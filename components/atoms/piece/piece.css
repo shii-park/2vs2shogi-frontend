@@ -6,7 +6,7 @@
     transform: translate(-50%, -50%); /* 自身のサイズ半分だけずらして完全中央揃え */
     z-index: 10; /* マスより手前に表示 */
 
-    transition-duration: 0.2s;
+    transition-duration: 0.15s;
     pointer-events: auto; /* ポインタイベントの有効化 */
 }
 

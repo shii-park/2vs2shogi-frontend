@@ -2,6 +2,7 @@ import type { BoardKey, BoardMapType } from "@/types/MapType"
 import { PieceType } from "@/types/PieceType"
 import { PieceMovableVector } from "@/constants/PieceMovableVector"
 import { boardProperty } from "@/constants/BoardProperty"
+import { Team } from "@/types/GameStates"
 
 // indexからボードマップのキーを返す関数
 export const getBoardKey = (x: number, y: number): BoardKey => { return `${x}_${y}` as BoardKey}
@@ -71,4 +72,17 @@ export const getMovableMasu = (boardMap: BoardMapType, current_x: number, curren
     })
 
     return movableMasu;
+}
+
+// 駒のマス判定
+export const canPromote = (
+    team: Team,
+    from_y: number,
+    to_y: number,
+    piece: PieceType
+): boolean => {
+    // 成っている、成れない駒を除外
+    if (piece.promoted || !piece.promotable) return false;
+
+    return from_y >= 6 || to_y >= 6;
 }

@@ -16,3 +16,7 @@
 .masu.not-movable {
     background-color: rgb(168, 138, 98);
 }
+
+.masu.promotable {
+    background-color: red;
+}
