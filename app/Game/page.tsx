@@ -4,6 +4,7 @@ import { useGameState } from "@/hooks/useBoardState";
 import { useGameControl } from "@/hooks/useGameControl";
 import { Team } from "@/types/GameStates";
 import { createInitialBoardMap } from "@/utils/initialBoardMap";
+import { createStackTestBoardMap } from "@/utils/stackInitmap";
 import { useEffect } from "react";
 
 export default function Game() {
@@ -36,7 +37,7 @@ export default function Game() {
     } = useGameControl(myTeam, boardMap);
 
     useEffect(() => {
-        initializeGameState(createInitialBoardMap(), new Map())
+        initializeGameState(createStackTestBoardMap(), new Map())
     }, [])
 
     return (

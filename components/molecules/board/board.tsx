@@ -6,6 +6,8 @@ import { BoardMapType, BoardKey, HandMapType, HandKey } from '@/types/MapType';
 import { canPromote, getBoardKey } from '@/utils/BoardMapUtils';
 import { GamePhase, Team } from '@/types/GameStates';
 import { PieceType } from '@/types/PieceType';
+import React, { useState } from 'react';
+import { StackTooltip } from '../stack-tooltip/stack-tooltip';
 
 type Props = {
     BoardMap: BoardMapType;
@@ -21,6 +23,7 @@ type Props = {
 }
 
 export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movableMasu, myTeam, selectPiece, cancelSelectedPiece, selectDest }: Props) {
+
     // 駒クリック関数
     const handlePieceClick = (x: number, y: number, piece: PieceType) => {
         // フェーズの例外処理
@@ -69,6 +72,32 @@ export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movab
 
     }
 
+    // ホバー情報の管理
+    const [hoverInfo, setHoverInfo] = useState<{
+        pieces: PieceType[],
+        x: number,
+        y: number
+    } | null>(null);
+
+    // 駒hover時にスタック表示
+    const handleMouseEnter = (e: React.MouseEvent<HTMLImageElement>, stack: PieceType[]) => {
+        // 重なりの判定
+        if (stack.length <= 1) return;
+
+        // ホバー情報を取得
+        const rect = e.currentTarget.getBoundingClientRect();
+        setHoverInfo({
+            pieces: stack.slice(0, -1),
+            x: rect.right + 5,
+            y: rect.top,
+        });
+    };
+
+    // カーソルが駒から離れた処理
+    const handleMouseLeave = () => {
+        setHoverInfo(null);
+    };
+
     // 座標ループ用配列
     const board = [];
 
@@ -107,11 +136,12 @@ export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movab
                     {topPiece && (
                         <PieceDraw
                             topPiece={topPiece}
-                            pieceStack={cellStack.length > 1 ? cellStack.slice(0, -1) : []}
                             phase={phase}
                             isSelectedPiece={isSelectedPiece}
                             myTeam={myTeam}
                             onClick={() => { handlePieceClick(x, y, topPiece) }}
+                            onMouseEnter={(e) => handleMouseEnter(e, cellStack)}
+                            onMouseLeave={handleMouseLeave}
                         />
                     )}
                 </div>
@@ -119,5 +149,20 @@ export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movab
         }
     }
 
-    return <div className="board">{board}</div>;
+    return (
+        <div className="board">
+            {board}
+
+            {/* ホバー情報が存在する時だけツールチップを表示 */}
+            {hoverInfo && (
+                <StackTooltip
+                    stackPieces={hoverInfo.pieces}
+                    x={hoverInfo.x}
+                    y={hoverInfo.y}
+                    myTeam={myTeam}
+                    phase={phase}
+                />
+            )}
+        </div>
+    );
 }

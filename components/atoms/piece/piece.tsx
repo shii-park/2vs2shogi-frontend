@@ -3,17 +3,19 @@ import Image from "next/image";
 import { getPieceImgPath } from '@/utils/getPieceImgPath'
 import type { PieceType } from '@/types/PieceType'
 import { GamePhase, Team } from '@/types/GameStates';
+import React from 'react';
 
 type Props = {
     topPiece : PieceType;
-    pieceStack: PieceType[];
     phase : GamePhase;
     isSelectedPiece : PieceType | null;
     myTeam: Team;
     onClick: (piece: PieceType) => void;
+    onMouseEnter?: (e: React.MouseEvent<HTMLImageElement>) => void;
+    onMouseLeave?: () => void;
 }
 
-export function PieceDraw({topPiece, pieceStack, phase, isSelectedPiece, myTeam, onClick}: Props) {
+export function PieceDraw({topPiece, phase, isSelectedPiece, myTeam, onClick, onMouseEnter, onMouseLeave}: Props) {
     const imgPath: string = getPieceImgPath({team: topPiece.team, type: topPiece.type, promoted: topPiece.promoted,})
     const pieceClass = [
     'piece',
@@ -22,7 +24,6 @@ export function PieceDraw({topPiece, pieceStack, phase, isSelectedPiece, myTeam,
     isSelectedPiece === topPiece && 'isSelected',
     isSelectedPiece !== null && isSelectedPiece !== topPiece && 'otherSelected',
     isSelectedPiece === null && 'noneSelected',
-    pieceStack.length !== 0 && 'stack',
     // pieceのクラスはここに追加
     ]
     .filter(Boolean)
@@ -36,5 +37,7 @@ export function PieceDraw({topPiece, pieceStack, phase, isSelectedPiece, myTeam,
                     height={40}
                     style={{ maxWidth: '80%', height: 'auto' }} // マスからはみ出さないようにする
                     onClick={() => onClick(topPiece)}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
             />)
 }
