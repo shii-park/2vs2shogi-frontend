@@ -1,7 +1,7 @@
 import { GamePhase, Team } from "@/types/GameStates";
 import { BoardMapType } from "@/types/MapType";
 import { PieceType } from "@/types/PieceType";
-import { getMovableMasu } from "@/utils/BoardMapUtils";
+import { getDroppableMasu, getMovableMasu } from "@/utils/BoardMapUtils";
 import { useCallback, useState } from "react";
 
 export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
@@ -23,8 +23,8 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         setPendingDest(null);   
     }, [])
 
-    // 駒の選択時処理
-    const selectPiece = useCallback((piece: PieceType, x: number, y: number) => {
+    // 盤面の駒選択処理
+    const selectBoardPiece = useCallback((piece: PieceType, x: number, y: number) => {
         // 自分のターンかつ、「駒選択フェーズ」または「マス選択フェーズ」であるか
         if (currentTurn !== myTeam) return;
         if (phase !== "selecting_piece" && phase !== "selecting_dest") return;
@@ -40,8 +40,25 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         setSelectedPos({x, y});
         setPhase("selecting_dest");
 
-        // 移動可能マスを受け取り代入
+        // 移動可能マスをセット
         setMovableMasu(getMovableMasu(BoardMap, x, y, piece));
+    }, [currentTurn, myTeam, phase, BoardMap])
+
+    // 持ち駒選択処理
+    const selectHandPiece = useCallback((piece: PieceType) => {
+        // 自分のターンかつ、「駒選択フェーズ」または「マス選択フェーズ」であるか
+        if (currentTurn !== myTeam) return;
+        if (phase !== "selecting_piece" && phase !== "selecting_dest") return;
+        // 選択された駒が自陣の駒であるか
+        if (piece.team !== myTeam) return;
+
+        // 駒をセットし、フェーズを更新
+        setIsSelectedPiece(piece);
+        setSelectedPos(null);
+        setPhase("selecting_dest");
+
+        // 持ち駒の移動マスをセット
+        setMovableMasu(getDroppableMasu(BoardMap, piece, myTeam))
     }, [currentTurn, myTeam, phase, BoardMap])
 
     // 駒の選択キャンセル(同じ駒を押したとき、画面の何もないことろを押したとき)
@@ -71,6 +88,73 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         setPendingDest(null);
         setPhase("selecting_dest");
     }, [phase])
+
+    // 盤面上の駒クリック関数
+    const clickBoardPiece = useCallback((piece: PieceType, x: number, y: number) => {
+        // フェーズの例外処理
+        if (phase !== "selecting_dest" && phase !== "selecting_piece") return;
+
+        // 捕獲の判定
+        if (piece.team !== myTeam && phase === "selecting_dest") {
+            // クリックした駒が取れるのか判定
+            const capturable = movableMasu.some(([cx, cy]) => cx === x && cy === y);
+            if (capturable) {
+                // マスの一時保存
+                selectDest(x, y);
+                // ここでgame/pageの移動・成り確認画面の表示関数
+            }
+            else {
+                cancelSelectedPiece();
+                return;
+            }
+        }
+
+        // 前の選択した駒と比較して同じであれば選択キャンセル
+        if (isSelectedPiece === piece) {
+            cancelSelectedPiece();
+            return;
+        } else {
+            // 異なる場合は駒をセット
+            selectBoardPiece(piece, x, y);
+            return;
+        }
+    }, [phase, myTeam, movableMasu, isSelectedPiece, selectDest, cancelSelectedPiece, selectBoardPiece])
+
+    // 持ち駒クリック関数
+    const clickHandPiece = useCallback((piece: PieceType) => {
+        // フェーズチェック
+        if (currentTurn !== myTeam) return;
+        if (phase !== "selecting_piece" && phase !== "selecting_dest") return;
+
+        // 前の選択した駒と比較して同じであれば選択キャンセル
+        if (isSelectedPiece === piece) {
+            cancelSelectedPiece();
+            return;
+        } else {
+            // 異なる場合は駒をセット
+            selectHandPiece(piece);
+            return;
+        }
+    }, [currentTurn, myTeam, phase, isSelectedPiece, cancelSelectedPiece, selectHandPiece])
+
+    // マスクリック関数
+    const clickMasu = useCallback((x: number, y: number) => {
+        // フェーズの例外処理
+        if (phase !== "selecting_dest") return;
+
+        // 移動可能マス配列の中身を検索して判定する
+        const isMovable = movableMasu.some(([cx, cy]) => cx === x && cy === y);
+        // 移動可能マスでないなら、駒選択を解除
+        if (!isMovable) {
+            cancelSelectedPiece();
+            return;
+        }
+
+        // マスの一時保存
+        selectDest(x, y);
+        // ここでgame/pageの移動・成り確認画面の表示関数
+
+    }, [phase, movableMasu, cancelSelectedPiece, selectDest])
 
     // 移動先確定後の処理
     const confirmMove = useCallback((isPromote: boolean = false) => {
@@ -125,10 +209,12 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         movableMasu,
         isMyTurn: currentTurn === myTeam,
 
-        selectPiece,
         cancelSelectedPiece,
         selectDest,
         cancelPending,
+        clickBoardPiece,
+        clickHandPiece,
+        clickMasu,
         confirmMove,
         turnEnd,
         gameEnd,
