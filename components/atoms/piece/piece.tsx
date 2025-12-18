@@ -5,6 +5,7 @@ import type { PieceType } from '@/types/PieceType'
 
 type Props = {
     p : PieceType;
+    pieceStack: PieceType[];
     isSelectable : boolean;
     isSelected : boolean;
     onClick: () => void;

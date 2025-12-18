@@ -1,20 +1,16 @@
 "use client";
-import { useGameState } from "@/hooks/useBoardState";
-
+import { InitialPieces } from "@/constants/InitialTest";
+import { BoardDraw } from "@/components/molecules/board/board"
+import { useEffect, useState } from "react";
+import { PieceType } from "@/types/PieceType";
+import { BoardKey } from "@/types/MapType";
 
 export default function Game() {
-    const {
-        boardMap,
-        handMap,
-        Move,
-        Capture,
-        Drop,
-        initializeGameState,
-    } = useGameState();
+
 
     return (
         <div>
-
+            {/* <BoardDraw /> */}
         </div>
     );
 }
