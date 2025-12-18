@@ -8,11 +8,9 @@ import { getBoardKey } from '@/utils/BoardMapUtils';
 type Props = {
     BoardMap: BoardMapType;
     HandMap: HandMapType;
-
-
 }
 
-export function BoardDraw({ BoardMap, HandMap }: Props) {
+export function BoardDraw({BoardMap, HandMap}: Props) {
     // 座標ループ用配列
     const board = [];
 
@@ -28,9 +26,8 @@ export function BoardDraw({ BoardMap, HandMap }: Props) {
 
 
             board.push(
-                <div>
+                <div key={`${x}-${y}`}>
                     <MasuDraw
-                        key={`${x}-${y}`}
                         x={x} y={y}
                         isSelectable={false}
                         isMovable={false}
@@ -44,7 +41,7 @@ export function BoardDraw({ BoardMap, HandMap }: Props) {
                             pieceStack={cellStack.length > 1 ? cellStack : []}
                             isSelectable={false}
                             isSelected={false}
-                            onClick={() => { }}
+                            onClick={() => {}}
                         />
                     )}
                 </div>
