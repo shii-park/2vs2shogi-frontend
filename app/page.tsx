@@ -12,29 +12,29 @@ export default function Page() {
 
   // 確定ボタン処理
   const handleStartGame = () => {
-      // 名前が空なら何もしない
-      if (!userName.trim()) return;
-      // Contextにすでに保存されているので、単にページ遷移するだけでOK
-      router.push("/lobby");
+    // 名前が空なら何もしない
+    if (!userName.trim()) return;
+    // Contextにすでに保存されているので、単にページ遷移するだけでOK
+    router.push("/lobby");
   };
-  
+
   return (
     <div>
       <main className="container">
-            {/* 入力欄 */}
-            <InputText 
-                value={userName}       // 共有されている値を表示
-                onChange={setUserName} // 入力されたら共有値を更新
-                placeholder="棋士名を入力"
-            />
+        {/* 入力欄 */}
+        <InputText
+          value={userName}       // 共有されている値を表示
+          onChange={setUserName} // 入力されたら共有値を更新
+          placeholder="棋士名を入力"
+        />
 
-            {/* 開始ボタン */}
-            <WhiteButton 
-                label="ゲーム開始" 
-                onClick={handleStartGame}
-                disable={userName.trim() === ""}
-            />
-        </main>
+        {/* 開始ボタン */}
+        <WhiteButton
+          label="ゲーム開始"
+          onClick={handleStartGame}
+          disabled={userName.trim() === ""}
+        />
+      </main>
     </div>
   );
 }

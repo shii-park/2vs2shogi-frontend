@@ -3,9 +3,9 @@ import './WhiteButton.css';
 type Props = {
     label: string;
     onClick: () => void;
-    disable?: boolean;
+    disabled?: boolean;
 };
 
-export function WhiteButton ({label, onClick, disable=false}: Props){
-    return <button onClick={onClick} disabled={disable}>{label}</button>;
+export function WhiteButton({ label, onClick, disabled = false }: Props) {
+    return <button onClick={onClick} disabled={disabled}>{label}</button>;
 }
