@@ -1,20 +1,20 @@
 "use client";
-import { InitialPieces } from "@/constants/InitialTest";
-import { BoardDraw } from "@/components/molecules/board/board"
-import { useEffect, useState } from "react";
-import { PieceType } from "@/types/PieceType";
-import { BoardMapKey } from "@/types/BoardMapType";
+import { useGameState } from "@/hooks/useBoardState";
+
 
 export default function Game() {
-    const [BoardMap, setBoardMap] = useState<Map<BoardMapKey, PieceType[]>>(() => new Map());
+    const {
+        boardMap,
+        handMap,
+        Move,
+        Capture,
+        Drop,
+        initializeGameState,
+    } = useGameState();
 
-    useEffect(() => {
-        // マッチング時の初回処理
-    }, [])
-    
-    return(
+    return (
         <div>
-          <BoardDraw/>
+
         </div>
     );
 }
