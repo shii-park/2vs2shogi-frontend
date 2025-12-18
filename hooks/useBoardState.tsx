@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import type { PieceType } from "@/types/PieceType";
 import type { BoardKey, HandKey } from "@/types/MapType";
-import { getBoradKey } from "@/utils/BoardMapUtils";
+import { getBoardKey } from "@/utils/BoardMapUtils";
 
 export function useGameState() {
     const [boardMap, setBoardMap] = useState<Map<BoardKey, PieceType[]>>(() => new Map());  // 盤面map
@@ -30,7 +30,7 @@ export function useGameState() {
     const Move = useCallback((x_to: number, y_to: number, piece: PieceType) => {
         setBoardMap(prevBoard => {
             const key_from = findBoardKey(piece, prevBoard);
-            const key_to = getBoradKey(x_to, y_to);
+            const key_to = getBoardKey(x_to, y_to);
             if (!key_from || key_from === key_to) {
                 console.log(`Error:${prevBoard}に${piece}が存在しない、または${key_to}と${key_from}が等しいです`)
                 return prevBoard;
@@ -113,7 +113,7 @@ export function useGameState() {
 
         // BoardMapのコピーnextBoardMapを作成し更新
         const nextBoardMap = new Map(boardMap);
-        const key_to = getBoradKey(x_to, y_to);
+        const key_to = getBoardKey(x_to, y_to);
         const stack_to = nextBoardMap.get(key_to) ?? [];
         nextBoardMap.set(key_to, [...stack_to, piece]);
 
