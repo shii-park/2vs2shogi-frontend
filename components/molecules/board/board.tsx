@@ -8,12 +8,6 @@ import { getBoardKey } from '@/utils/BoardMapUtils';
 type Props = {
     BoardMap: BoardMapType;
     HandMap: HandMapType;
-
-type Props = {
-    BoardMap: BoardMapType;
-    HandMap: HandMapType;
-
-
 }
 
 export function BoardDraw({BoardMap, HandMap}: Props) {
