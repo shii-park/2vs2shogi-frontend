@@ -5,6 +5,9 @@ import { boardProperty } from '@/constants/BoardProperty';
 import { BoardMapType, BoardKey, HandMapType, HandKey } from '@/types/MapType';
 import { getBoardKey } from '@/utils/BoardMapUtils';
 
+type Props = {
+    BoardMap: BoardMapType;
+    HandMap: HandMapType;
 
 type Props = {
     BoardMap: BoardMapType;

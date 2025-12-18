@@ -15,7 +15,7 @@ export function useGameState() {
         // fondEntryがあればキーを返す
         return foundEntry ? foundEntry[0] : undefined;
     };
-    
+
     // 盤面・持ち駒状態を一括設定する関数(初期化・復帰用)
     const initializeGameState = useCallback((
         newBoard: Map<BoardKey, PieceType[]>,
