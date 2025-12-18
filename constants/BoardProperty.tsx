@@ -4,7 +4,7 @@ type BoardProperty = {
     height_max: number;
 };
 
-export const board_property: BoardProperty = {
+export const boardProperty: BoardProperty = {
     width_max: 8,
     height_max: 8,
 }

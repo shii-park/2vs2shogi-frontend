@@ -3,18 +3,14 @@ import { InitialPieces } from "@/constants/InitialTest";
 import { BoardDraw } from "@/components/molecules/board/board"
 import { useEffect, useState } from "react";
 import { PieceType } from "@/types/PieceType";
-import { BoardMapKey } from "@/types/BoardMapType";
+import { BoardKey } from "@/types/MapType";
 
 export default function Game() {
-    const [BoardMap, setBoardMap] = useState<Map<BoardMapKey, PieceType[]>>(() => new Map());
 
-    useEffect(() => {
-        // マッチング時の初回処理
-    }, [])
-    
-    return(
+
+    return (
         <div>
-          <BoardDraw/>
+            <BoardDraw />
         </div>
     );
 }
