@@ -76,15 +76,19 @@ export function useGameControl(myTeam: Team) {
     // ターン終了処理
     const turnEnd = useCallback(() => {
         // ターンの切り替え
-        setcurrentTurn(c => c === "first" ? "second" : "first");
-
+        setcurrentTurn(prev => {
+        const next = prev === "first" ? "second" : "first";
+        
         // フェーズの切り替え
-        if (currentTurn === myTeam) {
+        if (next === myTeam) {
             setPhase("selecting_piece");
         } else {
             setPhase("waiting_opp");
         }
-    }, [phase, myTeam]);
+
+        return next;
+    });
+}, [myTeam]);
 
     // ゲーム終了処理(投了、王を取る・取られる等)
     const gameEnd = useCallback(() => {
