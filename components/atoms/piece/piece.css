@@ -18,6 +18,7 @@
 /* 味方の駒 || 選択可能 || 他に駒が選択されていない */
 .ally.selectable.noneSelected:hover {
     transform: translate(-50%, -50%) scale(1.2);
+    background-color: rgba(255, 255, 255, 0.4); /* ハイライト */
 }
 
 /* 味方の駒 || 他に駒が選択されている */

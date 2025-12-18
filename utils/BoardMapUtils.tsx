@@ -92,6 +92,24 @@ export const canPromote = (
     return from_y >= 6 || to_y >= 6;
 }
 
+// 必ずならなければいけないか判定
+export const mustPromote = (
+    pType: PieceType["type"],
+    ToY: number, 
+): boolean => {
+    // 歩、香車は最も上段に到達したとき
+    switch(pType){
+        case "pawn":
+        case "lance":
+            return (ToY === boardProperty.boardHeight);
+    // 桂馬は上2段に到達したとき
+        case "knight":
+            return (ToY === boardProperty.boardHeight || ToY === boardProperty.boardHeight-1);
+        default:
+            return false;
+    }
+}
+
 export const getDroppableMasu = (
     boardMap: BoardMapType,
     piece: PieceType,   // 打とうとしている持ち駒

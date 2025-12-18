@@ -20,7 +20,7 @@ type Props = {
     cancelSelectedPiece: () => void;
     selectDest: (x: number, y: number) => void;
     clickBoardPiece: ((piece: PieceType, x: number, y: number) => void);
-    clickMasu: ((x: number, y: number) => void);
+    clickMasu: ((isPromotable: boolean, x: number, y: number) => void);
 }
 
 export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movableMasu, myTeam, cancelSelectedPiece, selectDest, clickBoardPiece, clickMasu }: Props) {
@@ -80,9 +80,8 @@ export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movab
                         x={x} y={y}
                         phase={phase}
                         isMovable={isMovable}
-                        isSelectedPiece={isSelectedPiece}
                         isPromotable={isPromotable}
-                        onClick={() => { clickMasu(x, y) }}
+                        onClick={() => { clickMasu(isPromotable, x, y) }}
                     />
 
                     {/* topPieceが存在するときのみ、PieceDraw*/}
