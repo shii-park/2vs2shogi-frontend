@@ -1,0 +1,32 @@
+.inpuText {
+    /* サイズと形状 */
+    width: 100%;
+    max-width: 400px; /* 横幅の最大値（調整可能） */
+    padding: 12px 30px; /* 上下左右に余裕を持たせる */
+    border-radius: 100px; /* 完全に丸くする */
+
+    /* デザイン */
+    border: 2px solid #fff; /* 白い枠線 */
+    background-color: rgba(120, 90, 60, 0.5); /* 半透明の茶色背景 */
+    
+    /* フォント */
+    color: #fff;
+    font-size: 1.5rem; /* 画像に合わせて少し大きめに */
+    font-weight: bold;
+    font-family: sans-serif;
+    
+    /* 入力時の挙動 */
+    outline: none; /* デフォルトの青い枠を消す */
+    text-align: left; /* 左寄せ（中央寄せにしたい場合は center に） */
+    transition: background-color 0.2s;
+}
+
+/* プレースホルダー（入力前の薄い文字）の色 */
+.input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* フォーカス時のアクション（少し背景を濃くするなど） */
+.input:focus {
+    background-color: rgba(120, 90, 60, 0.7);
+}
