@@ -3,7 +3,7 @@ import { MasuDraw } from '../../atoms/masu/masu';
 import { PieceDraw } from '@/components/atoms/piece/piece';
 import { boardProperty } from '@/constants/BoardProperty';
 import { BoardMapType, BoardKey, HandMapType, HandKey } from '@/types/MapType';
-import { getBoradKey } from '@/utils/BoardMapUtils';
+import { getBoardKey } from '@/utils/BoardMapUtils';
 
 type Props = {
     BoardMap: BoardMapType;
@@ -12,7 +12,7 @@ type Props = {
 
 }
 
-export function BoardDraw({BoardMap, HandMap}: Props) {
+export function BoardDraw({ BoardMap, HandMap }: Props) {
     // 座標ループ用配列
     const board = [];
 
@@ -20,7 +20,7 @@ export function BoardDraw({BoardMap, HandMap}: Props) {
         for (let x = 0; x <= boardProperty.width_max; x++) {
 
             //ここにboardmapのキー`x_y`からスタック取得
-            const cellKey: BoardKey = getBoradKey(x, y);
+            const cellKey: BoardKey = getBoardKey(x, y);
             const cellStack = BoardMap.get(cellKey) ?? [];
 
             // スタックの一番上の駒を取得
@@ -44,7 +44,7 @@ export function BoardDraw({BoardMap, HandMap}: Props) {
                             pieceStack={cellStack.length > 1 ? cellStack : []}
                             isSelectable={false}
                             isSelected={false}
-                            onClick={() => {}}
+                            onClick={() => { }}
                         />
                     )}
                 </div>
