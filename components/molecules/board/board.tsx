@@ -3,7 +3,8 @@ import { MasuDraw } from '../../atoms/masu/masu';
 import { PieceDraw } from '@/components/atoms/piece/piece';
 import { boardProperty } from '@/constants/BoardProperty';
 import { BoardMapType, BoardKey, HandMapType, HandKey } from '@/types/MapType';
-import { getBoradKey } from '@/utils/BoardMapUtils';
+import { getBoardKey } from '@/utils/BoardMapUtils';
+
 
 type Props = {
     BoardMap: BoardMapType;
@@ -20,7 +21,7 @@ export function BoardDraw({BoardMap, HandMap}: Props) {
         for (let x = 0; x <= boardProperty.width_max; x++) {
 
             //ここにboardmapのキー`x_y`からスタック取得
-            const cellKey: BoardKey = getBoradKey(x, y);
+            const cellKey: BoardKey = getBoardKey(x, y);
             const cellStack = BoardMap.get(cellKey) ?? [];
 
             // スタックの一番上の駒を取得
@@ -28,9 +29,8 @@ export function BoardDraw({BoardMap, HandMap}: Props) {
 
 
             board.push(
-                <div>
+                <div key={`${x}-${y}`}>
                     <MasuDraw
-                        key={`${x}-${y}`}
                         x={x} y={y}
                         isSelectable={false}
                         isMovable={false}

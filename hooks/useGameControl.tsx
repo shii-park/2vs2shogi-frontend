@@ -94,7 +94,7 @@ export function useGameControl(myTeam: Team) {
     const gameEnd = useCallback(() => {
         // フェーズの切り替え
         setPhase("game_over");
-    }, [phase]);
+    }, []);
 
     return {
         currentTurn,
