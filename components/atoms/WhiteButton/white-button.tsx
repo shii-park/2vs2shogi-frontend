@@ -6,5 +6,5 @@ type Props = {
 };
 
 export function WhiteButton ({label, onClick}: Props){
-    return <button onClick={onClick}>{label}</button>;
+    return <button className="whitebutton" onClick={onClick}>{label}</button>;
 }

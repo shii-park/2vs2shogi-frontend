@@ -7,6 +7,8 @@ import { useGameControl } from "@/hooks/useGameControl";
 import { Team } from "@/types/GameStates";
 import { createHandTestBoardMap, createHandTestHandMap } from "@/utils/handTestInitMap";
 import { useEffect } from "react";
+import { ConfirmPromote } from "@/components/molecules/ConfirmPromote/ConfirmProm";
+import { createStackTestBoardMap } from "@/utils/stackInitmap";
 
 export default function Game() {
     const myTeam: Team = "first"
@@ -35,7 +37,7 @@ export default function Game() {
         // 成りの確認が必要な場合はnullが返される
         const moveData = handleClickMasu(isPromotable, x, y);
 
-        if (moveData){
+        if (moveData) {
             console.log(moveData);
             // バックに送信処理
         }
@@ -47,15 +49,15 @@ export default function Game() {
     const promoteConfirm = (promote: boolean) => {
         // 確認画面を経由した場合は、State使用で送信用データを作成
         const moveData = createMoveData(promote);
-
-        if (moveData){
+        if (moveData) {
             console.log(moveData);
             // バックに送信処理
         }
     };
 
     useEffect(() => {
-        initializeGameState(createHandTestBoardMap(), createHandTestHandMap());
+        initializeGameState(createStackTestBoardMap(), new Map());
+        // initializeGameState(createHandTestBoardMap(), createHandTestHandMap());
     }, [])
 
     return (
@@ -102,7 +104,13 @@ export default function Game() {
 
             </div>
 
-            {/* ここに確認画面を表示させるコンポーネントを追加 */}
+            {/* 成りの確認画面を表示 */}
+            {phase === "confirming" && (
+                <ConfirmPromote
+                    promClcik={() => promoteConfirm(true)}
+                    notPromClick={() => promoteConfirm(false)}
+                />
+            )}
         </div>
     );
 }

@@ -6,5 +6,5 @@ type Props = {
 };
 
 export function OutlineButtton ({label, onClick}: Props) {
-    return <button onClick={onClick}>{label}</button>
+    return <button className="outlinebutton" onClick={onClick}>{label}</button>
 }
