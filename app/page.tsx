@@ -14,9 +14,8 @@ export default function Page() {
   const handleStartGame = () => {
       // 名前が空なら何もしない
       if (!userName.trim()) return;
-
       // Contextにすでに保存されているので、単にページ遷移するだけでOK
-      router.push("/game");
+      router.push("/lobby");
   };
   
   return (
