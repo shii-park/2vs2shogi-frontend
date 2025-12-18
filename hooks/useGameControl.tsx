@@ -76,7 +76,7 @@ export function useGameControl(myTeam: Team) {
     // ターン終了処理
     const turnEnd = useCallback(() => {
         // ターンの切り替え
-        setcurrentTurn(currentTurn === "first" ? "second" : "first");
+        setcurrentTurn(c => c === "first" ? "second" : "first");
 
         // フェーズの切り替え
         if (currentTurn === myTeam) {
