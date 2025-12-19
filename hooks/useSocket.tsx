@@ -33,15 +33,14 @@ export const SocketProvider = ({children}: { children: ReactNode}) => {
     // URL生成を関数化(useWebSocketに引数で渡すため)
     const getSocketUrl = useCallback(() => {
         // ローカルストレージからセッションIDを取得
-        const sessionId = typeof window !== 'undefined' ? localStorage.getItem("sessionId") : "";
+        if (typeof window === "undefined") return "";
 
-        // クエリパラメータを作成
-        const queryParams = new URLSearchParams({
-            username: userName,
-            sessionId: sessionId || "",
-        });
-
-        return `ws://localhost:8080/ws/game?${queryParams.toString()}`;
+        const sessionId = localStorage.getItem("sessionId");
+        if (!sessionId) {
+            throw new Error("sessionId が存在しません");
+        }
+        
+        return `ws://localhost:8080/ws/game?${encodeURIComponent(sessionId)}`;
     }, [shouldConnect, userName])
 
     // useWebSocketによってリクエストを送信
