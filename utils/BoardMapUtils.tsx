@@ -8,7 +8,12 @@ import { Team } from "@/types/GameStates"
 export const getBoardKey = (x: number, y: number): BoardKey => { return `${x}_${y}` as BoardKey}
 
 // 駒とmapから、移動可能なマスを計算する関数
-export const getMovableMasu = (boardMap: BoardMapType, current_x: number, current_y: number, piece: PieceType): [number, number][] => {
+export const getMovableMasu = (
+    boardMap: BoardMapType,
+    current_x: number,
+    current_y: number,
+    piece: PieceType
+): [number, number][] => {
     // 返り値用配列
     const movableMasu: [number, number][] = [];
 
@@ -74,7 +79,7 @@ export const getMovableMasu = (boardMap: BoardMapType, current_x: number, curren
     return movableMasu;
 }
 
-// 駒のマス判定
+// 駒の成りマス判定
 export const canPromote = (
     team: Team,
     from_y: number,
@@ -85,4 +90,49 @@ export const canPromote = (
     if (piece.promoted || !piece.promotable) return false;
 
     return from_y >= 6 || to_y >= 6;
+}
+
+export const getDroppableMasu = (
+    boardMap: BoardMapType,
+    piece: PieceType,   // 打とうとしている持ち駒
+    myTeam: Team,
+): [number, number][]  => {
+    // 返り値用配列
+    const droppableMasu: [number, number][] = [];
+    // 二歩判定用配列
+    const nifuColumns = new Set<number>();
+
+    // 駒が歩であれば、二歩の判定
+    if (piece.type === 'pawn'){
+        for (let x = 0; x <= boardProperty.boardWidth; x++){
+            for (let y = 0; y <= boardProperty.boardHeight; y++){
+                const boardKey = getBoardKey(x, y);
+                const stack = boardMap.get(boardKey) ?? [];
+                // 列に味方の歩、かつ成っていないか判定
+                const pawn_flag = stack.some(p => p.type === "pawn" && p.promoted === false && p.team === myTeam)
+                if(pawn_flag){
+                    nifuColumns.add(x);
+                    break;
+                }
+            }
+        }
+    }
+
+    // 持ち駒を打てるマスの計算
+    for (let x = 0; x <= boardProperty.boardWidth; x++){
+        // 二歩の列ならスキップ(pieceが歩でないならnihuColumnsは空)
+        if (nifuColumns.has(x)) continue;
+
+        for (let y = 0; y <= boardProperty.boardHeight; y++){
+            const boardKey = getBoardKey(x, y);
+            const stack = boardMap.get(boardKey) ?? [];
+
+            // マスに駒がない場合は返り値配列に追加
+            if (!stack || stack.length === 0){
+                droppableMasu.push([x, y]);
+            }
+        }
+    }
+
+    return droppableMasu;
 }

@@ -24,3 +24,15 @@
 .ally.otherSelected {
     filter: grayscale(100%);
 }
+
+/* 選択可能な味方の駒には、常に指マークを表示する */
+.ally.selectable {
+    cursor: pointer;
+}
+
+/* (オプション) 選択中も他の駒を選び直せることがわかるように、
+   グレーアウトしている駒にホバーしたら色を戻してあげる */
+.ally.otherSelected:hover {
+    filter: grayscale(0%);
+    transform: translate(-50%, -50%) scale(1.1);
+}

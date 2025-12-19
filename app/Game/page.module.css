@@ -1,0 +1,37 @@
+/* app/game/page.module.css */
+
+/* .game-field -> .gameField に変更 */
+.gameField {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: none;
+    /* padding: 20px; 必要に応じて */
+}
+
+/* .game-layout -> .gameLayout に変更 */
+.gameLayout {
+    display: flex;
+    flex-direction: row; /* 横並び！ */
+    align-items: flex-end; /* 下揃え */
+    gap: 20px;
+}
+
+/* .sidebar -> .sidebar (そのまま) */
+.sidebar {
+    width: 140px; 
+    display: flex;
+    flex-direction: column;
+}
+
+/* .left-sidebar -> .leftSidebar に変更 */
+.leftSidebar {
+    justify-content: flex-start; /* 敵は上寄せ */
+    align-self: flex-start;      /* 敵エリア全体を上に */
+}
+
+/* .right-sidebar -> .rightSidebar に変更 */
+.rightSidebar {
+    justify-content: flex-end;   /* 自分は下寄せ */
+}

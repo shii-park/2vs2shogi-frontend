@@ -17,60 +17,13 @@ type Props = {
     movableMasu: [number, number][];
     myTeam: Team;
 
-    selectPiece: (piece: PieceType, x: number, y: number) => void;
     cancelSelectedPiece: () => void;
     selectDest: (x: number, y: number) => void;
+    clickBoardPiece: ((piece: PieceType, x: number, y: number) => void);
+    clickMasu: ((x: number, y: number) => void);
 }
 
-export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movableMasu, myTeam, selectPiece, cancelSelectedPiece, selectDest }: Props) {
-
-    // 駒クリック関数
-    const handlePieceClick = (x: number, y: number, piece: PieceType) => {
-        // フェーズの例外処理
-        if (phase !== "selecting_dest" && phase !== "selecting_piece") return;
-
-        // 敵の駒をクリックかつ、マス選択フェーズのときした場合、
-        if (piece.team !== myTeam && phase === "selecting_dest") {
-            // クリックした駒が取れるのか判定
-            const capturable = movableMasu.some(([cx, cy]) => cx === x && cy === y);
-            if (capturable) {
-                // マスの一時保存
-                selectDest(x, y);
-                // ここでgame/pageの移動・成り確認画面の表示関数
-            }
-            else {
-                cancelSelectedPiece();
-                return;
-            }
-        }
-
-        // 前の選択した駒と比較して同じであれば選択キャンセル
-        if (isSelectedPiece === piece) {
-            cancelSelectedPiece();
-            return;
-        } else {
-            // 異なる場合は駒をセット
-            selectPiece(piece, x, y);
-            return;
-        }
-    }
-
-    // マスクリック関数
-    const handleMasuClick = (movable: boolean, x: number, y: number) => {
-        // フェーズの例外処理
-        if (phase !== "selecting_dest") return;
-
-        // 移動可能マスでないなら、駒選択を解除
-        if (!movable) {
-            cancelSelectedPiece();
-            return;
-        }
-
-        // マスの一時保存
-        selectDest(x, y);
-        // ここでgame/pageの移動・成り確認画面の表示関数
-
-    }
+export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movableMasu, myTeam, cancelSelectedPiece, selectDest, clickBoardPiece, clickMasu }: Props) {
 
     // ホバー情報の管理
     const [hoverInfo, setHoverInfo] = useState<{
@@ -129,7 +82,7 @@ export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movab
                         isMovable={isMovable}
                         isSelectedPiece={isSelectedPiece}
                         isPromotable={isPromotable}
-                        onClick={() => { handleMasuClick(isMovable, x, y) }}
+                        onClick={() => { clickMasu(x, y) }}
                     />
 
                     {/* topPieceが存在するときのみ、PieceDraw*/}
@@ -139,7 +92,7 @@ export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movab
                             phase={phase}
                             isSelectedPiece={isSelectedPiece}
                             myTeam={myTeam}
-                            onClick={() => { handlePieceClick(x, y, topPiece) }}
+                            onClick={() => { clickBoardPiece(topPiece, x, y) }}
                             onMouseEnter={(e) => handleMouseEnter(e, cellStack)}
                             onMouseLeave={handleMouseLeave}
                         />

@@ -1,0 +1,81 @@
+/* ■ 駒台（コンテナ）のスタイル */
+.hand-container {
+    display: flex;
+    flex-wrap: wrap;       /* 駒が増えたら折り返す */
+    align-content: flex-start; /* 駒を上詰め（敵なら下詰め）で配置 */
+    gap: 4px;              /* 駒同士の間隔 */
+    padding: 8px;
+    background-color: #edc9a4; /* 駒台っぽい木目色 */
+    border-radius: 4px;
+    
+    /* サイドバー用に幅と高さを確保 */
+    width: 100%;           /* 親要素(sidebar)の幅いっぱいに広げる */
+    min-height: 140px;     /* 駒台の最低限の高さ */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2); /* 少し凹んだ感じにする */
+}
+
+/* 敵の駒台 */
+.hand-container.opp {
+    /* transform: rotate(180deg); */
+    border-top: 4px solid #8b4513; /* 天板の厚み表現 */
+}
+
+/* 味方の駒台 */
+.hand-container.ally {
+    border-bottom: 4px solid #8b4513; /* 手前側の厚み */
+}
+
+
+/* ■ 各駒のラッパー (ボタンとしての領域) */
+.hand-piece {
+    position: relative; /* バッジ配置の基準 */
+    width: 45px;        /* 駒の画像サイズ */
+    height: 48px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transition: transform 0.1s ease;
+    border-radius: 4px;
+}
+
+/* 味方かつクリック可能な時だけアクションをつける */
+.hand-piece[data-clickable="true"] {
+    cursor: pointer;
+}
+
+.hand-piece[data-clickable="true"]:hover {
+    transform: scale(1.1); /* ホバー時に少し大きく */
+    background-color: rgba(255, 255, 255, 0.4); /* ハイライト */
+    z-index: 10; /* ホバー時は他の駒より手前に */
+}
+
+/* 敵の駒はクリックできないのでカーソルを変えない */
+.hand-piece[data-clickable="false"] {
+    cursor: default;
+}
+
+
+/* ■ 枚数カウントバッジ (そのまま採用！) */
+.hand-piece-count {
+    position: absolute;
+    bottom: -5px; /* 少し位置調整 */
+    right: -5px;
+    
+    background-color: #222;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: sans-serif;
+    
+    width: 18px;
+    height: 18px;
+    line-height: 18px; /* 文字を垂直中央に */
+    text-align: center;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    z-index: 5;
+    
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
