@@ -1,14 +1,14 @@
-button {
-    font-size: 2rem;
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    color: #fff;
-    padding: 0.25rem 2rem;
-    background: transparent;
-    border: 0.2rem solid #fff;
-    border-radius: 2rem;
+.outlinebutton {
+  font-size: 2rem;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: #fff;
+  padding: 0.25rem 2rem;
+  background: transparent;  
+  border: 0.2rem solid #fff;
+  border-radius: 2rem;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 
 button:hover {

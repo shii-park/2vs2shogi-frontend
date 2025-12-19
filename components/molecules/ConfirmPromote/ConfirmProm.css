@@ -1,0 +1,62 @@
+/* 画面全体を覆うオーバーレイ(背景) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒背景 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 盤面より手前に */
+}
+
+/* ダイアログ本体 */
+.dialog {
+    background-color: #fffaf0; /* 和紙っぽい色 */
+    width: 400px;  /* 幅はお好みで */
+    height: 240px; /* 高さを指定することで上下配置を安定させる */
+    padding: 20px;
+    border-radius: 8px;
+    border: 3px solid #8b4513; /* 将棋盤っぽい枠線 */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+
+    /* 縦方向のFlexboxにする */
+    display: flex;
+    flex-direction: column;
+}
+
+/* メッセージエリア */
+.messageArea {
+    /* これが重要！余ったスペースを全て埋めることで、
+       上のメッセージは中央に、下のボタンは底に押しやられる */
+    flex-grow: 1; 
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text {
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    font-family: serif; /* 明朝体っぽくすると将棋らしい */
+}
+
+/* ボタンエリア (フッター) */
+.footer {
+    display: flex;
+    justify-content: space-between; /* 子要素を両端に配置 */
+    align-items: flex-end;          /* 下揃え */
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* もしボタン個別のスタイル調整が必要ならここに記述 */
+/* .notPromote {
+}
+.promote {
+} */

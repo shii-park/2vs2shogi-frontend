@@ -1,7 +1,7 @@
 import { GamePhase, Team } from "@/types/GameStates";
 import { BoardMapType } from "@/types/MapType";
 import { PieceType } from "@/types/PieceType";
-import { getDroppableMasu, getMovableMasu } from "@/utils/BoardMapUtils";
+import { getDroppableMasu, getMovableMasu, mustPromote } from "@/utils/BoardMapUtils";
 import { useCallback, useState } from "react";
 
 export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
@@ -20,8 +20,31 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         setIsSelectedPiece(null);
         setSelectedPos(null);
         setMovableMasu([]);
-        setPendingDest(null);   
+        setPendingDest(null);
     }, [])
+
+    // バックに送信するデータを準備
+    // manualDest: 指定があればその座標を使う (Stateの反映待ち回避)
+    const createMoveData = useCallback((isPromote: boolean, manualDest?: { x: number, y: number }) => {
+        // manualDestを優先して使用
+        const destination = manualDest || pendingDest;
+        // 移動確認フェーズであるか
+        if (!isSelectedPiece || !destination) return null;
+
+        // 駒、移動先、成りのデータを返り値としてまとめる
+        const moveData = {
+            piece: isSelectedPiece,
+            to: destination,
+            promote: isPromote
+        };
+
+        // 状態クリア
+        stateClear();
+
+        // フェーズの変更、移動データを返す
+        setPhase("waitAlly");
+        return moveData;
+    }, [phase, isSelectedPiece, pendingDest, stateClear])
 
     // 盤面の駒選択処理
     const selectBoardPiece = useCallback((piece: PieceType, x: number, y: number) => {
@@ -37,7 +60,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
 
         // 駒をセットし、フェーズを更新
         setIsSelectedPiece(piece);
-        setSelectedPos({x, y});
+        setSelectedPos({ x, y });
         setPhase("selecting_dest");
 
         // 移動可能マスをセット
@@ -137,10 +160,10 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         }
     }, [currentTurn, myTeam, phase, isSelectedPiece, cancelSelectedPiece, selectHandPiece])
 
-    // マスクリック関数
-    const clickMasu = useCallback((x: number, y: number) => {
+    // 成りの確認画面を表示するか判定、しない場合バックに送るmoveDataを返す
+    const handleClickMasu = useCallback((isPromotable: boolean, x: number, y: number) => {
         // フェーズの例外処理
-        if (phase !== "selecting_dest") return;
+        if (phase !== "selecting_dest" || !isSelectedPiece) return;
 
         // 移動可能マス配列の中身を検索して判定する
         const isMovable = movableMasu.some(([cx, cy]) => cx === x && cy === y);
@@ -152,30 +175,22 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
 
         // マスの一時保存
         selectDest(x, y);
-        // ここでgame/pageの移動・成り確認画面の表示関数
 
-    }, [phase, movableMasu, cancelSelectedPiece, selectDest])
+        // 成り確認画面の判定
+        // 必ず成らなければいけない処理を最初に行う
+        if (mustPromote(isSelectedPiece.type, y)) {
+            // 確認画面が不要なときは、送信データを作成して返す
+            return createMoveData(true, { x, y });;
+        } else if (isPromotable) {
+            // 確認画面を表示 
+            setPhase("confirming");
+            return null;
+        } else {
+            // 確認画面が不要なときは、送信データを作成して返す
+            return createMoveData(false, { x, y });
+        }
 
-    // 移動先確定後の処理
-    const confirmMove = useCallback((isPromote: boolean = false) => {
-        // 移動確認フェーズであるか
-        if (phase !== "confirming" || !isSelectedPiece || !pendingDest) return;
-
-        // 駒、移動先、成りのデータを返り値としてまとめる
-        const moveData = {
-            piece: isSelectedPiece,
-            to: pendingDest,
-            promote: isPromote
-        };
-
-        // 状態クリア
-        stateClear();
-
-        // フェーズの変更、移動データを返す
-        setPhase("waitAlly");
-        return moveData;
-    }, [phase, isSelectedPiece, pendingDest])
-
+    }, [phase, movableMasu, cancelSelectedPiece, selectDest, isSelectedPiece, createMoveData,])
 
     // ターン終了処理
     const turnEnd = useCallback(() => {
@@ -214,8 +229,8 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         cancelPending,
         clickBoardPiece,
         clickHandPiece,
-        clickMasu,
-        confirmMove,
+        handleClickMasu,
+        createMoveData,
         turnEnd,
         gameEnd,
     }
