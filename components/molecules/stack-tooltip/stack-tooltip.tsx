@@ -29,7 +29,7 @@ export function StackTooltip({ stackPieces, x, y, myTeam, phase }: Props) {
                         <PieceDraw
                             topPiece={piece}
                             phase={phase}
-                            isSelectedPiece={null}  // 駒を選択しているときは表示しない
+                            selectedPiece={null}  // 駒を選択しているときは表示しない
                             myTeam={myTeam}
                             onClick={() => { }}  // クリック無効化
                         />

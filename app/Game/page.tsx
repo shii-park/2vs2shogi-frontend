@@ -20,7 +20,7 @@ export default function Game() {
 
     const {
         phase,
-        isSelectedPiece,
+        selectedPiece,
         selectedPos,
         movableMasu,
         cancelSelectedPiece,
@@ -70,7 +70,7 @@ export default function Game() {
                         handStack={handMap.get(myTeam === "first" ? "second" : "first") ?? []}
                         isAlly={false}
                         phase={phase}
-                        isSelectedPiece={isSelectedPiece}
+                        selectedPiece={selectedPiece}
                         myTeam={myTeam}
                         clickHandPiece={clickHandPiece}
                     />
@@ -80,7 +80,7 @@ export default function Game() {
                     <BoardDraw
                         BoardMap={boardMap}
                         phase={phase}
-                        isSelectedPiece={isSelectedPiece}
+                        selectedPiece={selectedPiece}
                         selectedPos={selectedPos}
                         movableMasu={movableMasu}
                         myTeam={myTeam}
@@ -96,7 +96,7 @@ export default function Game() {
                         handStack={handMap.get(myTeam) ?? []}
                         isAlly={true}
                         phase={phase}
-                        isSelectedPiece={isSelectedPiece}
+                        selectedPiece={selectedPiece}
                         myTeam={myTeam}
                         clickHandPiece={clickHandPiece}
                     />
