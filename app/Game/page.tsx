@@ -1,16 +1,58 @@
 "use client";
-import { InitialPieces } from "@/constants/InitialTest";
-import { BoardDraw } from "@/components/molecules/board/board"
-import { useEffect, useState } from "react";
-import { PieceType } from "@/types/PieceType";
-import { BoardKey } from "@/types/MapType";
+import { BoardDraw } from "@/components/molecules/board/board";
+import { useGameState } from "@/hooks/useBoardState";
+import { useGameControl } from "@/hooks/useGameControl";
+import { Team } from "@/types/GameStates";
+import { createInitialBoardMap } from "@/utils/initialBoardMap";
+import { useEffect } from "react";
 
 export default function Game() {
+    const myTeam: Team = "first"    //テストとしてfirst
 
+    const {
+        boardMap,
+        handMap,
+        Move,
+        Capture,
+        Drop,
+        initializeGameState,
+    } = useGameState();
+    const {
+        currentTurn,
+        phase,
+        isSelectedPiece,
+        selectedPos,
+        pendingDest,
+        movableMasu,
+        isMyTurn,
+
+        selectPiece,
+        cancelSelectedPiece,
+        selectDest,
+        cancelPending,
+        confirmMove,
+        turnEnd,
+        gameEnd,
+    } = useGameControl(myTeam, boardMap);
+
+    useEffect(() => {
+        initializeGameState(createInitialBoardMap(), new Map())
+    }, [])
 
     return (
         <div>
-            {/* <BoardDraw /> */}
+            <BoardDraw
+                BoardMap={boardMap}
+                phase={phase}
+                isSelectedPiece={isSelectedPiece}
+                selectedPos={selectedPos}
+                movableMasu={movableMasu}
+                myTeam={myTeam}
+
+                selectPiece={selectPiece}
+                cancelSelectedPiece={cancelSelectedPiece}
+                selectDest={selectDest}
+            />
         </div>
     );
 }

@@ -8,5 +8,5 @@ type Props = {
 }
 
 export function getPieceImgPath({team, type, promoted}: Props) {
-    return `/images/pieces/${team}_${promoted ? "prom_": ""}${type}.png`;
+    return `/images/pieces/${team === "first" ? "ally" : "opp"}_${promoted ? "prom_": ""}${type}.png`;
 }
