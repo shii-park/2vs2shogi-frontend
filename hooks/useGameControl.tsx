@@ -44,7 +44,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         // フェーズの変更、移動データを返す
         setPhase("waitAlly");
         return moveData;
-    }, [phase, isSelectedPiece, pendingDest])
+    }, [phase, isSelectedPiece, pendingDest, stateClear])
 
     // 盤面の駒選択処理
     const selectBoardPiece = useCallback((piece: PieceType, x: number, y: number) => {
@@ -190,7 +190,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
             return createMoveData(false, { x, y });
         }
 
-    }, [phase, movableMasu, cancelSelectedPiece, selectDest])
+    }, [phase, movableMasu, cancelSelectedPiece, selectDest, isSelectedPiece, createMoveData,])
 
     // ターン終了処理
     const turnEnd = useCallback(() => {
