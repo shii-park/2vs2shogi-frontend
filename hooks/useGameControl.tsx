@@ -53,16 +53,11 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         // タイマーがnullか判定
         if (timerCount === null) return;
 
-        // タイマーの秒数判定
-        if (timerCount <= 0) {
-            setTimerCount(null);
-            return;
-        }
-
         const id = setTimeout(() => {
-            setTimerCount(prev =>
-                prev === null ? null : prev - oneSeconds
-            );
+            setTimerCount(prev => {
+                if (prev === null) return null;
+                return Math.max(prev - oneSeconds, 0);
+            });
         }, oneSeconds);
 
         return () => clearTimeout(id);
