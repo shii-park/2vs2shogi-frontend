@@ -5,7 +5,7 @@ on:
     branches:
       - develop
   workflow_dispatch:
-  
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -20,7 +20,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Login to ACR
-        run: az scr login --name ${{ secrets.ACR_NAME }}
+        run: az acr login --name ${{ secrets.ACR_NAME }}
       
       - name: Build and Push Image
         run: |
