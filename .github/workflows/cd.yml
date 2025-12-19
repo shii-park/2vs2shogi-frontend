@@ -1,0 +1,37 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+  
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to ACR
+        run: az scr login --name ${{ secrets.ACR_NAME }}
+      
+      - name: Build and Push Image
+        run: |
+          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latestdev .
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latest-develop
+
+      - name: Deploy to Container Apps
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          acrName: ${{ secrets.ACR_NAME }}
+          containerAppName: frontend-app
+          resourceGroup: ${{ secrets.RESOURCE_GROUP }}
+          imageToDeploy: ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latest-dev
+          targetPort: 3000
