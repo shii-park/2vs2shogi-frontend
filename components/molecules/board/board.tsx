@@ -12,7 +12,7 @@ import { StackTooltip } from '../stack-tooltip/stack-tooltip';
 type Props = {
     BoardMap: BoardMapType;
     phase: GamePhase;
-    isSelectedPiece: PieceType | null;
+    selectedPiece: PieceType | null;
     selectedPos: { x: number, y: number } | null;
     movableMasu: [number, number][];
     myTeam: Team;
@@ -23,7 +23,7 @@ type Props = {
     clickMasu: ((isPromotable: boolean, x: number, y: number) => void);
 }
 
-export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movableMasu, myTeam, cancelSelectedPiece, selectDest, clickBoardPiece, clickMasu }: Props) {
+export function BoardDraw({ BoardMap, phase, selectedPiece, selectedPos, movableMasu, myTeam, cancelSelectedPiece, selectDest, clickBoardPiece, clickMasu }: Props) {
 
     // ホバー情報の管理
     const [hoverInfo, setHoverInfo] = useState<{
@@ -54,8 +54,8 @@ export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movab
     // 座標ループ用配列
     const board = [];
 
-    for (let y = boardProperty.boardHeight; y >= 0; y--) {
-        for (let x = 0; x <= boardProperty.boardWidth; x++) {
+    for (let y = boardProperty.height; y >= 0; y--) {
+        for (let x = 0; x <= boardProperty.width; x++) {
 
             //ここにboardmapのキー`x_y`からスタック取得
             const cellKey: BoardKey = getBoardKey(x, y);
@@ -69,9 +69,9 @@ export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movab
             // 成れるマスかどうか
             const isPromotable = !!(
                 isMovable &&
-                isSelectedPiece &&
+                selectedPiece &&
                 selectedPos &&
-                canPromote(myTeam, selectedPos.y, y, isSelectedPiece)
+                canPromote(myTeam, selectedPos.y, y, selectedPiece)
             );
 
             board.push(
@@ -89,7 +89,7 @@ export function BoardDraw({ BoardMap, phase, isSelectedPiece, selectedPos, movab
                         <PieceDraw
                             topPiece={topPiece}
                             phase={phase}
-                            isSelectedPiece={isSelectedPiece}
+                            selectedPiece={selectedPiece}
                             myTeam={myTeam}
                             onClick={() => { clickBoardPiece(topPiece, x, y) }}
                             onMouseEnter={(e) => handleMouseEnter(e, cellStack)}

@@ -1,15 +1,15 @@
-export const PieceMovableVector = (p_Type: string, promoted: boolean): [number, number][][] => {
-    if (promoted)p_Type = `prom_${p_Type}`;
+export const PieceMovableVector = (pieceType: string, promoted: boolean): [number, number][][] => {
+    if (promoted) pieceType = `prom_${pieceType}`;
 
     // 返り値:[[1マスの移動ベクトル配列], [スライド移動ベクトル配列]]
-    switch (p_Type) {
+    switch (pieceType) {
         case 'king':
         case 'king2':
             return [[[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]], []];
         case 'gold':
             return [[[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [0, -1]], []];
         case 'silver':
-            return [[[1, 1], [0, 1], [-1 ,1], [-1, -1], [1, -1]], []];
+            return [[[1, 1], [0, 1], [-1, 1], [-1, -1], [1, -1]], []];
         case 'knight':
             return [[[-1, 2], [1, 2]], []];
         case 'lance':

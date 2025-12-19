@@ -9,13 +9,13 @@ type Props = {
     handStack: PieceType[];
     isAlly: boolean;
     phase: GamePhase;
-    isSelectedPiece: PieceType | null;
+    selectedPiece: PieceType | null;
     myTeam: Team;
     clickHandPiece: (piece: PieceType) => void;
 };
 
 // PieceType配列から描写
-export function HandPieceDraw({handStack, isAlly, phase, isSelectedPiece, myTeam, clickHandPiece}: Props) {
+export function HandPieceDraw({ handStack, isAlly, phase, selectedPiece, myTeam, clickHandPiece }: Props) {
     // 駒の集計
     const HandGroups = useMemo(() => formatHandPieces(handStack), [handStack]);
 
@@ -24,21 +24,21 @@ export function HandPieceDraw({handStack, isAlly, phase, isSelectedPiece, myTeam
 
     return (
         <div className={`hand-container ${isAlly ? 'ally' : 'opp'}`}>
-            {HandGroups.map((group) => 
+            {HandGroups.map((group) =>
                 <div key={group.piece.type}
-                className="hand-piece"
-                onClick={() => {
-                    if (!isAlly) return;    // 敵の持ち駒にはクリック関数は必要ない
-                    clickHandPiece(group.piece);
-                }}
-                data-clickable={isAlly}
+                    className="hand-piece"
+                    onClick={() => {
+                        if (!isAlly) return;    // 敵の持ち駒にはクリック関数は必要ない
+                        clickHandPiece(group.piece);
+                    }}
+                    data-clickable={isAlly}
                 >
                     <PieceDraw
                         topPiece={group.piece}
                         phase={phase}
-                        isSelectedPiece={isSelectedPiece}
+                        selectedPiece={selectedPiece}
                         myTeam={myTeam}
-                        onClick={() => {}}
+                        onClick={() => { }}
                     />
 
                     {/* 枚数表示 */}

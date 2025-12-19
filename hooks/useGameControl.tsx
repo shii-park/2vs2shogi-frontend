@@ -5,11 +5,11 @@ import { getDroppableMasu, getMovableMasu, mustPromote } from "@/utils/BoardMapU
 import { useCallback, useState } from "react";
 
 export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
-    const [currentTurn, setcurrentTurn] = useState<Team>("first");  // 現在の手番
+    const [currentTurn, setCurrentTurn] = useState<Team>("first");  // 現在の手番
     const [phase, setPhase] = useState<GamePhase>(
         myTeam === "first" ? "selecting_piece" : "waiting_opp"
     );  // 現在のフェーズ
-    const [isSelectedPiece, setIsSelectedPiece] = useState<PieceType | null>(null); //選択している駒
+    const [selectedPiece, setselectedPiece] = useState<PieceType | null>(null); //選択している駒
     const [selectedPos, setSelectedPos] = useState<{ x: number, y: number } | null>(null);      //選択している駒の座標
     const [pendingDest, setPendingDest] = useState<{ x: number, y: number } | null>(null);      //移動先の保留
     const [movableMasu, setMovableMasu] = useState<[number, number][]>([]); // 移動可能マス配列
@@ -17,7 +17,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
     // 状態クリア関数
     const stateClear = useCallback(() => {
         // 状態クリア
-        setIsSelectedPiece(null);
+        setselectedPiece(null);
         setSelectedPos(null);
         setMovableMasu([]);
         setPendingDest(null);
@@ -29,11 +29,11 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         // manualDestを優先して使用
         const destination = manualDest || pendingDest;
         // 移動確認フェーズであるか
-        if (!isSelectedPiece || !destination) return null;
+        if (!selectedPiece || !destination) return null;
 
         // 駒、移動先、成りのデータを返り値としてまとめる
         const moveData = {
-            piece: isSelectedPiece,
+            piece: selectedPiece,
             to: destination,
             promote: isPromote
         };
@@ -44,7 +44,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         // フェーズの変更、移動データを返す
         setPhase("waitAlly");
         return moveData;
-    }, [phase, isSelectedPiece, pendingDest, stateClear])
+    }, [phase, selectedPiece, pendingDest, stateClear])
 
     // 盤面の駒選択処理
     const selectBoardPiece = useCallback((piece: PieceType, x: number, y: number) => {
@@ -59,7 +59,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         }
 
         // 駒をセットし、フェーズを更新
-        setIsSelectedPiece(piece);
+        setselectedPiece(piece);
         setSelectedPos({ x, y });
         setPhase("selecting_dest");
 
@@ -76,7 +76,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         if (piece.team !== myTeam) return;
 
         // 駒をセットし、フェーズを更新
-        setIsSelectedPiece(piece);
+        setselectedPiece(piece);
         setSelectedPos(null);
         setPhase("selecting_dest");
 
@@ -133,7 +133,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         }
 
         // 前の選択した駒と比較して同じであれば選択キャンセル
-        if (isSelectedPiece === piece) {
+        if (selectedPiece === piece) {
             cancelSelectedPiece();
             return;
         } else {
@@ -141,7 +141,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
             selectBoardPiece(piece, x, y);
             return;
         }
-    }, [phase, myTeam, movableMasu, isSelectedPiece, selectDest, cancelSelectedPiece, selectBoardPiece])
+    }, [phase, myTeam, movableMasu, selectedPiece, selectDest, cancelSelectedPiece, selectBoardPiece])
 
     // 持ち駒クリック関数
     const clickHandPiece = useCallback((piece: PieceType) => {
@@ -150,7 +150,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         if (phase !== "selecting_piece" && phase !== "selecting_dest") return;
 
         // 前の選択した駒と比較して同じであれば選択キャンセル
-        if (isSelectedPiece === piece) {
+        if (selectedPiece === piece) {
             cancelSelectedPiece();
             return;
         } else {
@@ -158,12 +158,12 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
             selectHandPiece(piece);
             return;
         }
-    }, [currentTurn, myTeam, phase, isSelectedPiece, cancelSelectedPiece, selectHandPiece])
+    }, [currentTurn, myTeam, phase, selectedPiece, cancelSelectedPiece, selectHandPiece])
 
     // 成りの確認画面を表示するか判定、しない場合バックに送るmoveDataを返す
     const handleClickMasu = useCallback((isPromotable: boolean, x: number, y: number) => {
         // フェーズの例外処理
-        if (phase !== "selecting_dest" || !isSelectedPiece) return;
+        if (phase !== "selecting_dest" || !selectedPiece) return;
 
         // 移動可能マス配列の中身を検索して判定する
         const isMovable = movableMasu.some(([cx, cy]) => cx === x && cy === y);
@@ -178,7 +178,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
 
         // 成り確認画面の判定
         // 必ず成らなければいけない処理を最初に行う
-        if (mustPromote(isSelectedPiece.type, y)) {
+        if (mustPromote(selectedPiece.type, y)) {
             // 確認画面が不要なときは、送信データを作成して返す
             return createMoveData(true, { x, y });;
         } else if (isPromotable) {
@@ -190,24 +190,24 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
             return createMoveData(false, { x, y });
         }
 
-    }, [phase, movableMasu, cancelSelectedPiece, selectDest, isSelectedPiece, createMoveData,])
+    }, [phase, movableMasu, cancelSelectedPiece, selectDest, selectedPiece, createMoveData,])
 
     // ターン終了処理
     const turnEnd = useCallback(() => {
         // ターンの切り替え
-        setcurrentTurn(prev => {
-        const next = prev === "first" ? "second" : "first";
-        
-        // フェーズの切り替え
-        if (next === myTeam) {
-            setPhase("selecting_piece");
-        } else {
-            setPhase("waiting_opp");
-        }
+        setCurrentTurn(prev => {
+            const next = prev === "first" ? "second" : "first";
 
-        return next;
-    });
-}, [myTeam]);
+            // フェーズの切り替え
+            if (next === myTeam) {
+                setPhase("selecting_piece");
+            } else {
+                setPhase("waiting_opp");
+            }
+
+            return next;
+        });
+    }, [myTeam]);
 
     // ゲーム終了処理(投了、王を取る・取られる等)
     const gameEnd = useCallback(() => {
@@ -218,7 +218,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
     return {
         currentTurn,
         phase,
-        isSelectedPiece,
+        selectedPiece,
         selectedPos,
         pendingDest,
         movableMasu,
