@@ -24,8 +24,8 @@ jobs:
       
       - name: Build and Push Image
         run: |
-          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latestdev .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latest-develop
+          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latest-dev .
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latest-dev
 
       - name: Deploy to Container Apps
         uses: azure/container-apps-deploy-action@v1
