@@ -1,0 +1,14 @@
+.timer {
+    color: #fff;
+
+    display: grid;
+    place-items: center;
+}
+
+.label {
+    font-size: 25px;
+}
+
+.counta {
+    font-size: 75px;
+}

@@ -3,6 +3,8 @@ import { InputText } from "@/components/atoms/InputText/InputText";
 import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 import { useUser } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
+import { useGameControl } from "@/hooks/useGameControl";
+import { TurnTimer } from "@/components/atoms/TurnTimer/TurnTimer";
 
 export default function Page() {
   const router = useRouter();
@@ -17,6 +19,11 @@ export default function Page() {
     // Contextにすでに保存されているので、単にページ遷移するだけでOK
     router.push("/lobby");
   };
+
+  const {timerCount, setTimerCount} = useGameControl("first", new Map());
+  const handleStartTimer = () => {
+    setTimerCount(20000);
+  }
 
   return (
     <div>
@@ -34,6 +41,13 @@ export default function Page() {
           onClick={handleStartGame}
           disabled={userName.trim() === ""}
         />
+
+        {/* タイマーテスト */}
+        <WhiteButton
+          label="タイマー開始"
+          onClick={handleStartTimer}
+        />
+        <TurnTimer isMyTimer={false} myTeam="second" currentTurn="second" currentCount={timerCount ?? 0}></TurnTimer>
       </main>
     </div>
   );

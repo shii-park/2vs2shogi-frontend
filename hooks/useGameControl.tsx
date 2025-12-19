@@ -13,9 +13,8 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
     const [selectedPos, setSelectedPos] = useState<{ x: number, y: number } | null>(null);      //選択している駒の座標
     const [pendingDest, setPendingDest] = useState<{ x: number, y: number } | null>(null);      //移動先の保留
     const [movableMasu, setMovableMasu] = useState<[number, number][]>([]); // 移動可能マス配列
-    const [timerCount, setTimerCount] = useState<number | null>(null);  // タイマーの秒数
+    const [timerCount, setTimerCount] = useState<number | null>(null);  // タイマーの秒数(ms)
     const oneSeconds = 1000;   // 1秒の定義
-    const oneMinutes = 60000;  // 1分の定義
 
     // 状態クリア関数
     const stateClear = useCallback(() => {
@@ -246,6 +245,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         selectedPos,
         pendingDest,
         movableMasu,
+        timerCount,
         isMyTurn: currentTurn === myTeam,
 
         cancelSelectedPiece,
@@ -255,6 +255,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         clickHandPiece,
         handleClickMasu,
         createMoveData,
+        setTimerCount,
         turnEnd,
         gameEnd,
     }
