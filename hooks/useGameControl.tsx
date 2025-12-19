@@ -95,26 +95,26 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
 
     // ターン終了処理
     const turnEnd = useCallback(() => {
-        // 次のターンを計算
-        const nextTurn = currentTurn === "first" ? "second" : "first";
-        setcurrentTurn(nextTurn);
-
-        // nextTurn が自分なら操作可能、そうでなければ待機
-        if (nextTurn === myTeam) {
+        // ターンの切り替え
+        setcurrentTurn(prev => {
+        const next = prev === "first" ? "second" : "first";
+        
+        // フェーズの切り替え
+        if (next === myTeam) {
             setPhase("selecting_piece");
         } else {
             setPhase("waiting_opp");
         }
 
-        // 念のため選択状態などをリセット
-        stateClear();
-    }, [currentTurn, myTeam]);
+        return next;
+    });
+}, [myTeam]);
 
     // ゲーム終了処理(投了、王を取る・取られる等)
     const gameEnd = useCallback(() => {
         // フェーズの切り替え
         setPhase("game_over");
-    }, [phase]);
+    }, []);
 
     return {
         currentTurn,
