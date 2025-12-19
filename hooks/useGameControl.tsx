@@ -23,6 +23,29 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         setPendingDest(null);
     }, [])
 
+    // バックに送信するデータを準備
+    // manualDest: 指定があればその座標を使う (Stateの反映待ち回避)
+    const createMoveData = useCallback((isPromote: boolean, manualDest?: { x: number, y: number }) => {
+        // manualDestを優先して使用
+        const destination = manualDest || pendingDest;
+        // 移動確認フェーズであるか
+        if (!isSelectedPiece || !destination) return null;
+
+        // 駒、移動先、成りのデータを返り値としてまとめる
+        const moveData = {
+            piece: isSelectedPiece,
+            to: destination,
+            promote: isPromote
+        };
+
+        // 状態クリア
+        stateClear();
+
+        // フェーズの変更、移動データを返す
+        setPhase("waitAlly");
+        return moveData;
+    }, [phase, isSelectedPiece, pendingDest])
+
     // 盤面の駒選択処理
     const selectBoardPiece = useCallback((piece: PieceType, x: number, y: number) => {
         // 自分のターンかつ、「駒選択フェーズ」または「マス選択フェーズ」であるか
@@ -168,30 +191,6 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         }
 
     }, [phase, movableMasu, cancelSelectedPiece, selectDest])
-
-    // バックに送信するデータを準備
-    // manualDest: 指定があればその座標を使う (Stateの反映待ち回避)
-    const createMoveData = useCallback((isPromote: boolean, manualDest?: { x: number, y: number }) => {
-        // manualDestを優先して使用
-        const destination = manualDest || pendingDest;
-        // 移動確認フェーズであるか
-        if (!isSelectedPiece || !destination) return null;
-
-        // 駒、移動先、成りのデータを返り値としてまとめる
-        const moveData = {
-            piece: isSelectedPiece,
-            to: destination,
-            promote: isPromote
-        };
-
-        // 状態クリア
-        stateClear();
-
-        // フェーズの変更、移動データを返す
-        setPhase("waitAlly");
-        return moveData;
-    }, [phase, isSelectedPiece, pendingDest])
-
 
     // ターン終了処理
     const turnEnd = useCallback(() => {
