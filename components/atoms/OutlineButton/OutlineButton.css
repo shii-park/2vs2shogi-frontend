@@ -13,6 +13,17 @@
   transition: transform 0.1s, background-color 0.2s;
 }
 
+/* 丸いボタン用のスタイル */
+.outlinebutton.circle {
+  width: 4rem;      /* 幅と高さを同じにする */
+  height: 4rem;
+  padding: 0;        /* 余白をリセット */
+  border-radius: 50%; /* 完全に丸くする */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .outlinebutton:hover {
   background: #a3835d;
 }

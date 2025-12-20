@@ -6,5 +6,14 @@ type Props = {
 };
 
 export function OutlineButtton ({label, onClick}: Props) {
-    return <button className="outlinebutton" onClick={onClick}>{label}</button>
+    // 1文字（?など）の場合は丸くするクラスを追加
+    const isCircle = label.length === 1;
+    return (
+        <button 
+            className={`outlinebutton ${isCircle ? 'circle' : ''}`} 
+            onClick={onClick}
+        >
+            {label}
+        </button>
+    );
 }
