@@ -3,7 +3,7 @@
     height: 100vh;
     /* 背景色(仮) */
     color: white;
-    padding: 40px 60px;
+    padding: 100px 100px;
     /* 全体の余白 */
     box-sizing: border-box;
 
@@ -34,28 +34,37 @@
     /* 上下中央揃えの設定 */
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    /* 縦方向の中央 */
+    /* justify-content: center; */
+    /* 縦方向の中央揃えを解除し、パディング等で位置を調整できるように変更 */
+    justify-content: flex-start;
+    
+    /* 位置微調整用のパディング (お好みの値に変更してください) */
+    padding-top: 0vh;
+    padding-left: 0;
+
     align-items: flex-start;
     /* 左寄せ */
 }
 
 .subTitle {
-    font-size: 2.5rem;
+    font-size: 4rem;
     font-weight: bold;
     line-height: 1;
+    padding-left: 10px;
 }
 
 .mainTitle {
-    font-size: 8rem;
-    font-family: "Hiragino Mincho ProN", "Yu Mincho", "MS PMincho", serif;
+    font-size: 15rem;
+    font-family: sans-serif; /* 将棋のフォントを棋士名入力欄と同じにする */
+    font-weight: bold; /* sans-serifを太字にする */
     line-height: 1.1;
-    margin: 10px 0;
 }
 
 .EnTitle {
-    font-size: 1.5rem;
-    opacity: 0.8;
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding-left: 20px;
+
 }
 
 /* --- グリッド画像エリア (右側全体) --- */
@@ -63,24 +72,23 @@
     grid-area: gridArea;
 
     display: flex;
-    justify-content: center;
-    align-items: center;
-    /* 右エリア内で上下中央配置 */
+    justify-content: flex-end; /* 右寄せ */
+    align-items: flex-start;   /* 上寄せ */
+    
     overflow: hidden;
     /* はみ出し防止 */
-    opacity: 0.6;
-    /* 背景っぽく薄くする場合 */
 }
 
 .gridSvg {
-    /* 最小幅を設定し、それ以上なら親に合わせて拡大 
-     height: auto でアスペクト比を維持
-  */
-    width: 100%;
-    min-width: 420px;
-    height: auto;
-    max-height: 90vh;
-    /* 画面からはみ出しすぎないように制限 */
+    /* 固定サイズにして拡大縮小を防ぐ */
+    width: 800px;
+    height: 800px; 
+    
+    /* 縮小・変形の基準を右上に設定 */
+    transform-origin: right top;
+    
+    /* 必要に応じてパディングやマージンで微調整 */
+    /* margin-top: -100px; などで画面外にはみ出させる演出も可能 */
 }
 
 
@@ -94,7 +102,7 @@
     display: flex;
     align-items: center;
     /* 垂直方向中央 */
-    justify-content: center;
+    justify-content: left;
     gap: 20px;
     /* 入力欄とボタンの間隔 */
 
@@ -109,7 +117,7 @@
   width: fit-content;
   
   /* 線と余白のデザイン */
-  border-bottom: 3px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 3px solid rgba(255, 255, 255);
   padding-bottom: 10px; /* 線とボタンの間の隙間 */
   padding-right: 20px;  /* (お好みで) 線の右側を少し伸ばすなら追加 */
 }
@@ -124,7 +132,7 @@
             "titleArea"
             "gridArea"
             "inputArea";
-        padding: 20px;
+        /* padding: 20px;   */
     }
 
     .mainTitle {
