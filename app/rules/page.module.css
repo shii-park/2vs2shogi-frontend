@@ -12,9 +12,43 @@
     font-size: 5rem;
     font-weight: bold;
     width: 100%;
+    margin-bottom: 50px; /* タイトル下の余白 */
 }
 
-.ulHowTo{
+/* 3つのボックスを囲むコンテナ */
+.rulesContainer {
+    display: flex;
+    justify-content: space-between; /* 均等に配置 */
+    gap: 40px; /* ボックス間の隙間 */
+    width: 100%;
+    height: 60%; /* 画面の高さの6割を使う */
+}
+
+/* 個別のルールボックス */
+.ruleBox {
+    flex: 1; /* 3等分にする */
+    border: 3px solid white;
+    padding: 30px;
+    border-radius: 20px;
+    
+    /* ボックス内の配置 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    background-color: rgba(0, 0, 0, 0.3); /* 半透明の背景 */
+}
+
+.ruleBox h2 {
     font-size: 2rem;
-    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 2px solid white;
+    padding-bottom: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.ruleBox p {
+    font-size: 1.2rem;
+    line-height: 1.8;
 }
