@@ -33,6 +33,7 @@ export default function Page() {
 
       // レスポンスからセッションIDを取得
       const data = await respone.json();  // jsonから変換
+      console.log(data);
       const sessionId = data.sessionId;
       // レスポンスエラー処理
       if (!sessionId) { throw new Error("セッションIDが取得できませんでした"); }
