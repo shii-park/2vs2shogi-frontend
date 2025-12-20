@@ -10,13 +10,26 @@
 }
 
 .masu.movable {
-    background-color: yellow;
+    position: relative;
 }
 
-.masu.not-movable {
-    background-color: rgb(168, 138, 98);
+.masu.movable::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 30%;
+    background-color: rgb(207, 207, 207);
+    border-radius: 50%;
 }
 
-.masu.promotable {
-    background-color: red;
+.masu.movable.promotable::after {
+    background-color: rgb(80, 80, 80);
 }
+
+/* .masu.not-movable { */
+    /* background-color: rgb(168, 138, 98);
+} */
+
