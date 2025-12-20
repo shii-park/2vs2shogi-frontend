@@ -1,0 +1,20 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    /* 背景色(仮) */
+    color: white;
+    padding: 100px 100px;
+    /* 全体の余白 */
+    box-sizing: border-box;
+}
+
+.title {
+    font-size: 5rem;
+    font-weight: bold;
+    width: 100%;
+}
+
+.ulHowTo{
+    font-size: 2rem;
+    font-weight: bold;
+}
