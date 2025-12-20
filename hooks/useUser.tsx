@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 type MatchUsers = {
   userName: string;
@@ -21,26 +21,24 @@ const storageKeys = {
 };
 
 export function useMatchUsers(): MatchUsers {
-  const [userName, setUserNameState] = useState("");
-  const [allyName, setAllyNameState] = useState("");
-  const [oppName1, setOppName1State] = useState("");
-  const [oppName2, setOppName2State] = useState("");
+  const [userName, setUserNameState] = useState(() =>
+    localStorage.getItem(storageKeys.userName) ?? ""
+  );
+  const [allyName, setAllyNameState] = useState(() =>
+    localStorage.getItem(storageKeys.allyName) ?? ""
+  );
+  const [oppName1, setOppName1State] = useState(() =>
+    localStorage.getItem(storageKeys.oppName1) ?? ""
+  );
+  const [oppName2, setOppName2State] = useState(() =>
+    localStorage.getItem(storageKeys.oppName2) ?? ""
+  );
 
-  /* 初回マウント時に localStorage から復元 */
-  useEffect(() => {
-    setUserNameState(localStorage.getItem(storageKeys.userName) ?? "");
-    setAllyNameState(localStorage.getItem(storageKeys.allyName) ?? "");
-    setOppName1State(localStorage.getItem(storageKeys.oppName1) ?? "");
-    setOppName2State(localStorage.getItem(storageKeys.oppName2) ?? "");
-  }, []);
-
-  /* 自分のユーザー名を保存 */
   const setUserName = useCallback((name: string) => {
     localStorage.setItem(storageKeys.userName, name);
     setUserNameState(name);
   }, []);
 
-  /* マッチング成立時に一括保存 */
   const setMatchUserNames = useCallback(
     (ally: string, opp1: string, opp2: string) => {
       localStorage.setItem(storageKeys.allyName, ally);
@@ -54,7 +52,6 @@ export function useMatchUsers(): MatchUsers {
     []
   );
 
-  /* 全ユーザー名リセット */
   const resetUserNames = useCallback(() => {
     Object.values(storageKeys).forEach((key) => {
       localStorage.removeItem(key);
