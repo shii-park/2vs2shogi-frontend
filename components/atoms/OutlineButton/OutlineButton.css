@@ -9,12 +9,14 @@
   border-radius: 2rem;
 
   cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.1s, background-color 0.2s;
 }
 
-button:hover {
+.outlinebutton:hover {
   background: #a3835d;
 }
 
-button:active {
+.outlinebutton:active {
   transform: scale(0.95);
 }
