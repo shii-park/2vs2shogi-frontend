@@ -21,30 +21,32 @@ const storageKeys = {
 };
 
 export function useMatchUsers(): MatchUsers {
-  // ★修正ポイント1: 初期値での localStorage アクセスを廃止し、空文字にする
-  // これでサーバー側での ReferenceError を回避します
-  const [userName, setUserNameState] = useState("");
-  const [allyName, setAllyNameState] = useState("");
-  const [oppName1, setOppName1State] = useState("");
-  const [oppName2, setOppName2State] = useState("");
+  // 4つの変数を1つのオブジェクトStateにまとめる
+  const [users, setUsers] = useState({
+    userName: "",
+    allyName: "",
+    oppName1: "",
+    oppName2: "",
+  });
 
-  // ★修正ポイント2: マウント後（クライアント側）でのみ localStorage を読み込む
+  // マウント後にまとめて1回だけ更新する（これでエラーが消えます）
   useEffect(() => {
-    // localStorage が使えるか念のため確認（通常はuseEffect内なら安全）
     if (typeof window !== "undefined") {
-      setUserNameState(localStorage.getItem(storageKeys.userName) ?? "");
-      setAllyNameState(localStorage.getItem(storageKeys.allyName) ?? "");
-      setOppName1State(localStorage.getItem(storageKeys.oppName1) ?? "");
-      setOppName2State(localStorage.getItem(storageKeys.oppName2) ?? "");
+      setUsers({
+        userName: localStorage.getItem(storageKeys.userName) ?? "",
+        allyName: localStorage.getItem(storageKeys.allyName) ?? "",
+        oppName1: localStorage.getItem(storageKeys.oppName1) ?? "",
+        oppName2: localStorage.getItem(storageKeys.oppName2) ?? "",
+      });
     }
   }, []);
 
   const setUserName = useCallback((name: string) => {
-    // 保存時も念のため window チェックを入れるとより安全です
     if (typeof window !== "undefined") {
       localStorage.setItem(storageKeys.userName, name);
     }
-    setUserNameState(name);
+    // prevを使って部分更新
+    setUsers((prev) => ({ ...prev, userName: name }));
   }, []);
 
   const setMatchUserNames = useCallback(
@@ -55,9 +57,12 @@ export function useMatchUsers(): MatchUsers {
         localStorage.setItem(storageKeys.oppName2, opp2);
       }
 
-      setAllyNameState(ally);
-      setOppName1State(opp1);
-      setOppName2State(opp2);
+      setUsers((prev) => ({
+        ...prev,
+        allyName: ally,
+        oppName1: opp1,
+        oppName2: opp2,
+      }));
     },
     []
   );
@@ -69,17 +74,19 @@ export function useMatchUsers(): MatchUsers {
       });
     }
 
-    setUserNameState("");
-    setAllyNameState("");
-    setOppName1State("");
-    setOppName2State("");
+    setUsers({
+      userName: "",
+      allyName: "",
+      oppName1: "",
+      oppName2: "",
+    });
   }, []);
 
   return {
-    userName,
-    allyName,
-    oppName1,
-    oppName2,
+    userName: users.userName,
+    allyName: users.allyName,
+    oppName1: users.oppName1,
+    oppName2: users.oppName2,
     setUserName,
     setMatchUserNames,
     resetUserNames,
