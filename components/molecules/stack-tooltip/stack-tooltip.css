@@ -2,7 +2,7 @@
     width: 100px;
     position: fixed; /* 親要素の影響を受けずに画面全体を基準にする */
     z-index: 1000;   /* 最前面に表示 */
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.2);
     border: 2px solid #555;
     border-radius: 8px;
     padding: 8px;
