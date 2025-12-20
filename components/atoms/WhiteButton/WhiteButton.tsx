@@ -7,5 +7,5 @@ type Props = {
 };
 
 export function WhiteButton({ label, onClick, disabled = false }: Props) {
-    return <button onClick={onClick} disabled={disabled}>{label}</button>;
+    return <button onClick={onClick} className="whitebutton" disabled={disabled}>{label}</button>;
 }
