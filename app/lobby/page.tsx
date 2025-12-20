@@ -2,7 +2,7 @@
 import style from "./page.module.css"
 import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 import { OutlineButtton } from "@/components/atoms/OutlineButton/OutlineButton";
-import { useUser } from "@/hooks/useUser";
+import { useMatchUsers } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
 
 
@@ -10,7 +10,9 @@ export default function Page() {
   const router = useRouter();
 
   // コンテキストからユーザー名取得
-  const userNameContext = useUser();
+  const {
+    userName
+  } = useMatchUsers();
 
   // 遊び方ボタンハンドラ
   const handleHowtoPlayButton = () => {
@@ -55,7 +57,7 @@ export default function Page() {
       <div className={style.matchingControls}>
         {/* ユーザー名 */}
         <div className={`${style.userName}`}>
-          <div className="text">{userNameContext.userName}</div>
+          <div className="text">{userName}</div>
         </div>
         {/* ボタン類 */}
         <div className={style.buttonsContainer}>
