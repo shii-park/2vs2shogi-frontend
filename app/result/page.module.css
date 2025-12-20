@@ -1,0 +1,83 @@
+.containar {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 24px 32px;
+    color: #fff;
+}
+/* ---------- 上段 ---------- */
+.topContainer {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    column-gap: 40px;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #fff;
+}
+
+/* Result + 勝利 */
+.resultLabels {
+    display: flex;
+    flex-direction: column;
+}
+
+.subLabel {
+    font-size: 20px;
+    /* font-weight: 600;
+    letter-spacing: 1px; */
+}
+
+.outcome {
+    font-size: 64px;
+    /* font-weight: 800;
+    line-height: 1; */
+}
+
+/* 自分チーム */
+.myUsersName {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.userName {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* メッセージ */
+.message {
+    justify-self: end;
+    font-size: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ---------- 下段 ---------- */
+.bottomContainer {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: start;
+    margin-top: 24px;
+}
+
+/* 対局相手ラベル */
+.oppLabel {
+    font-size: 32px;
+    font-weight: 700;
+    margin-right: 24px;
+}
+
+/* 相手チーム */
+.oppUsersName {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ボタン */
+.buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-end;
+}
