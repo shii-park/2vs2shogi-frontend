@@ -26,6 +26,7 @@ export default function Game() {
         selectedPiece,
         selectedPos,
         movableMasu,
+        isSurrender,
         cancelSelectedPiece,
         selectDest,
         clickBoardPiece,
@@ -34,6 +35,7 @@ export default function Game() {
         createMoveData,
         surrenderConfirm,
         surrenderCancel,
+        setIsSurrender,
     } = useGameControl(myTeam, boardMap);
 
     // useUserフックからユーザー名取得
@@ -70,6 +72,10 @@ export default function Game() {
 
     // 投了処理
     const handleSurrender = () => {
+        setIsSurrender(true);
+        surrenderCancel();
+
+        // バックに送信処理
         // テスト　後から修正
     }
 
@@ -120,8 +126,9 @@ export default function Game() {
 
                 <div className={`${styles.sidebar} ${styles.rightSidebar}`}>
                     <WhiteButton
-                        label="投了"
+                        label={isSurrender ? "投了済み" : "投了"}
                         onClick={surrenderConfirm}
+                        disabled={isSurrender}
                     />
                     <TurnTimer
                         // テスト後から修正
@@ -159,7 +166,7 @@ export default function Game() {
             {phase === "surrenderConfirming" && (
                 <ConfirmPromote
                     label="投了しますか？"
-                    promClcik={() => console.log("a")}
+                    promClcik={handleSurrender}
                     notPromClick={surrenderCancel}
                 />
             )}
