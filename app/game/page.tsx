@@ -6,7 +6,7 @@ import { useGameState } from "@/hooks/useBoardState";
 import { useGameControl } from "@/hooks/useGameControl";
 import { Team } from "@/types/GameStates";
 import { createHandTestBoardMap, createHandTestHandMap } from "@/utils/handTestInitMap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ConfirmPromote } from "@/components/molecules/ConfirmPromote/ConfirmProm";
 import { createStackTestBoardMap } from "@/utils/stackInitmap";
 import { TurnTimer } from "@/components/atoms/TurnTimer/TurnTimer";
@@ -34,6 +34,13 @@ export default function Game() {
         surrenderConfirm,
         surrenderCancel,
     } = useGameControl(myTeam, boardMap);
+
+    const [playerNames, setPlayerNames] = useState({
+        userName: "",
+        allyName: "",
+        oppName1: "",
+        oppName2: "",
+    });
 
     // バックに送信するための移動データを、GameControlから受け取るためのラッパー関数                                
     const clickMasu = (isPromotable: boolean, x: number, y: number) => {
@@ -71,14 +78,14 @@ export default function Game() {
         localStorage.setItem("allyName", "test1");
         localStorage.setItem("oppName1", "test2");
         localStorage.setItem("oppName2", "test3");
-    }, [])
 
-    // ユーザー名
-    const oppName1 = localStorage.getItem("oppName1");
-    const oppName2 = localStorage.getItem("oppName2");
-    const userName = localStorage.getItem("userName");
-    const allyName = localStorage.getItem("allyName");
-    
+        setPlayerNames({
+            userName: localStorage.getItem("userName") || "",
+            allyName: localStorage.getItem("allyName") || "",
+            oppName1: localStorage.getItem("oppName1") || "",
+            oppName2: localStorage.getItem("oppName2") || "",
+        });
+    }, [])
 
     return (
         <div className={styles.gameField}>
@@ -87,8 +94,8 @@ export default function Game() {
 
                 <div className={`${styles.sidebar} ${styles.leftSidebar}`}>
                     <div className={styles.playerName}>
-                        <div>{oppName1}</div>
-                        <div>{oppName2}</div>
+                        <div>{playerNames.oppName1}</div>
+                        <div>{playerNames.oppName2}</div>
                     </div>
 
                     <HandPieceDraw
@@ -146,8 +153,8 @@ export default function Game() {
                         clickHandPiece={clickHandPiece}
                     />
                     <div className={styles.playerName}>
-                        <div>{userName}</div>
-                        <div>{allyName}</div>
+                        <div>{playerNames.userName}</div>
+                        <div>{playerNames.allyName}</div>
                     </div>
                 </div>
 
