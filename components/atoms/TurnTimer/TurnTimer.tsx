@@ -21,8 +21,8 @@ export function TurnTimer({
         (!isMyTimer && myTeam !== currentTurn);
 
     const label = isMyTimer
-        ? "自チーム : 手番残り時間"
-        : "相手チーム : 手番残り時間";
+        ? "残り時間"
+        : "相手残り時間";
 
     const count = isActiveTimer
         ? formatTime(currentCount)
