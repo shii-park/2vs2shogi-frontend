@@ -73,6 +73,13 @@ export default function Game() {
         localStorage.setItem("oppName2", "test3");
     }, [])
 
+    // ユーザー名
+    const oppName1 = localStorage.getItem("oppName1");
+    const oppName2 = localStorage.getItem("oppName2");
+    const userName = localStorage.getItem("userName");
+    const allyName = localStorage.getItem("allyName");
+    
+
     return (
         <div className={styles.gameField}>
 
@@ -80,8 +87,8 @@ export default function Game() {
 
                 <div className={`${styles.sidebar} ${styles.leftSidebar}`}>
                     <div className={styles.playerName}>
-                        <div>{localStorage.getItem("oppName1")}</div>
-                        <div>{localStorage.getItem("oppName2")}</div>
+                        <div>{oppName1}</div>
+                        <div>{oppName2}</div>
                     </div>
 
                     <HandPieceDraw
@@ -139,8 +146,8 @@ export default function Game() {
                         clickHandPiece={clickHandPiece}
                     />
                     <div className={styles.playerName}>
-                        <div>{localStorage.getItem("userName")}</div>
-                        <div>{localStorage.getItem("allyName")}</div>
+                        <div>{userName}</div>
+                        <div>{allyName}</div>
                     </div>
                 </div>
 
