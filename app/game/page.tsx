@@ -9,6 +9,8 @@ import { createHandTestBoardMap, createHandTestHandMap } from "@/utils/handTestI
 import { useEffect } from "react";
 import { ConfirmPromote } from "@/components/molecules/ConfirmPromote/ConfirmProm";
 import { createStackTestBoardMap } from "@/utils/stackInitmap";
+import { TurnTimer } from "@/components/atoms/TurnTimer/TurnTimer";
+import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 
 export default function Game() {
     const myTeam: Team = "first"
@@ -29,6 +31,8 @@ export default function Game() {
         clickHandPiece,
         handleClickMasu,
         createMoveData,
+        surrenderConfirm,
+        surrenderCancel,
     } = useGameControl(myTeam, boardMap);
 
     // バックに送信するための移動データを、GameControlから受け取るためのラッパー関数                                
@@ -55,9 +59,18 @@ export default function Game() {
         }
     };
 
+    // 投了処理
+    const handleSurrender = () => {
+        // テスト　後から修正
+    }
+
     useEffect(() => {
         initializeGameState(createStackTestBoardMap(), new Map());
         // initializeGameState(createHandTestBoardMap(), createHandTestHandMap());
+        localStorage.setItem("userName", "myUserName");
+        localStorage.setItem("allyName", "test1");
+        localStorage.setItem("oppName1", "test2");
+        localStorage.setItem("oppName2", "test3");
     }, [])
 
     return (
@@ -66,6 +79,11 @@ export default function Game() {
             <div className={styles.gameLayout}>
 
                 <div className={`${styles.sidebar} ${styles.leftSidebar}`}>
+                    <div className="oppName">
+                        <div className="text">{localStorage.getItem("oppName1")}</div>
+                        <div className="text">{localStorage.getItem("oppName2")}</div>
+                    </div>
+
                     <HandPieceDraw
                         handStack={handMap.get(myTeam === "first" ? "second" : "first") ?? []}
                         isAlly={false}
@@ -75,7 +93,14 @@ export default function Game() {
                         clickHandPiece={clickHandPiece}
                     />
 
-                    
+                    <TurnTimer
+                        // テスト　後から修正
+                        isMyTimer={false}
+                        myTeam={myTeam}
+                        currentTurn={myTeam}
+                        currentCount={150}
+                    />
+
                 </div>
 
                 <div className={styles.mainBoard}>
@@ -94,6 +119,17 @@ export default function Game() {
                 </div>
 
                 <div className={`${styles.sidebar} ${styles.rightSidebar}`}>
+                    <WhiteButton
+                        label="投了"
+                        onClick={surrenderConfirm}
+                    />
+                    <TurnTimer
+                        // テスト後から修正
+                        isMyTimer={true}
+                        myTeam={myTeam}
+                        currentTurn={myTeam}
+                        currentCount={150}
+                    />
                     <HandPieceDraw
                         handStack={handMap.get(myTeam) ?? []}
                         isAlly={true}
@@ -102,15 +138,29 @@ export default function Game() {
                         myTeam={myTeam}
                         clickHandPiece={clickHandPiece}
                     />
+                    <div className="oppName">
+                        <div className="text">{localStorage.getItem("userName")}</div>
+                        <div className="text">{localStorage.getItem("allyName")}</div>
+                    </div>
                 </div>
 
             </div>
 
             {/* 成りの確認画面を表示 */}
-            {phase === "confirming" && (
+            {phase === "promoteConfirming" && (
                 <ConfirmPromote
+                    label="成りますか？"
                     promClcik={() => promoteConfirm(true)}
                     notPromClick={() => promoteConfirm(false)}
+                />
+            )}
+
+            {/* 投了の確認画面を表示 */}
+            {phase === "surrenderConfirming" && (
+                <ConfirmPromote
+                    label="投了しますか？"
+                    promClcik={() => console.log("a")}
+                    notPromClick={surrenderCancel}
                 />
             )}
         </div>
