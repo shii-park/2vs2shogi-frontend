@@ -1,4 +1,5 @@
 .stack-tooltip {
+    width: 100px;
     position: fixed; /* 親要素の影響を受けずに画面全体を基準にする */
     z-index: 1000;   /* 最前面に表示 */
     background-color: rgba(255, 255, 255, 0.95);
@@ -17,7 +18,7 @@
 }
 
 .stack-item {
-    width: 50px;  /* ここで大きさを指定 (例: 40px -> 50px) */
-    height: 50px;
+    width: 100px;  /* ここで大きさを指定 (例: 40px -> 50px) */
+    height: 100px;
     position: relative;
 }

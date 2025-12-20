@@ -74,6 +74,8 @@ export default function Game() {
                         myTeam={myTeam}
                         clickHandPiece={clickHandPiece}
                     />
+
+                    
                 </div>
 
                 <div className={styles.mainBoard}>
