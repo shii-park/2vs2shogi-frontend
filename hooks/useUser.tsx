@@ -1,3 +1,27 @@
+"use client";
+
+import { useCallback, useState } from "react";
+
+/* ===== 型定義 ===== */
+type MatchUsers = {
+  userName: string;
+  allyName: string;
+  oppName1: string;
+  oppName2: string;
+
+  setUserName: (name: string) => void;
+  setMatchUserNames: (ally: string, opp1: string, opp2: string) => void;
+  resetUserNames: () => void;
+};
+
+/* ===== localStorage key ===== */
+const storageKeys = {
+  userName: "userName",
+  allyName: "allyName",
+  oppName1: "oppName1",
+  oppName2: "oppName2",
+} as const;
+
 export function useMatchUsers(): MatchUsers {
   const [users, setUsers] = useState(() => {
     if (typeof window === "undefined") {
