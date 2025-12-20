@@ -1,4 +1,4 @@
-name: Frontend CI
+name: Frontend CD
 
 on:
   push:
@@ -24,8 +24,8 @@ jobs:
       
       - name: Build and Push Image
         run: |
-          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latest-dev .
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latest-dev
+          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }} .
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }}
 
       - name: Deploy to Container Apps
         uses: azure/container-apps-deploy-action@v1
@@ -33,5 +33,6 @@ jobs:
           acrName: ${{ secrets.ACR_NAME }}
           containerAppName: frontend-app
           resourceGroup: ${{ secrets.RESOURCE_GROUP }}
-          imageToDeploy: ${{ secrets.ACR_NAME }}.azurecr.io/frontend:latest-dev
+          # ★修正: デプロイする画像名も sha に合わせる
+          imageToDeploy: ${{ secrets.ACR_NAME }}.azurecr.io/frontend:${{ github.sha }}
           targetPort: 3000
