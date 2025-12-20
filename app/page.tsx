@@ -20,7 +20,7 @@ export default function Page() {
 
     try { 
       // バックのAPIをたたく
-      const respone = await fetch(`http://localhost:8080/api/auth/register${encodeURIComponent(userName)}`, {
+      const respone = await fetch(`http://localhost:8080/api/auth/register?username=${encodeURIComponent(userName)}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
