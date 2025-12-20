@@ -2,23 +2,22 @@
     width: 100vw;
     height: 100vh;
     
-    padding: 100px 100px;
+    padding: 100px 100px; /* 余白を詰める */
     display: grid;
 
     box-sizing: border-box;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: auto 1fr; /* 上段をコンテンツに合わせる */
 
     grid-template-areas: 
         "board info"
-        "board controls";
+        "empty controls";
 
-    gap: 20px;
 }
 
 /* 左半分（全体を占める） */
 .gridLayout {
-  grid-area: board;
+  grid-area: empty;
 }
 
 .matchInfoPanel {
@@ -35,7 +34,6 @@
   flex-direction: column; /* 縦並びに戻す */
   align-items: flex-end;   /* 右寄せ */
   justify-content: flex-end;
-  gap: 15px;              /* ユーザー名とボタンの間の隙間 */
 }
 
 .buttonsContainer {
