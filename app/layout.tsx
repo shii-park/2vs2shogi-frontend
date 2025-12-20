@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 // ★作成したプロバイダーをインポート
-import { UserProvider } from "@/hooks/useUser";
 import { SocketProvider } from "@/hooks/useSocket";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,11 +20,9 @@ export default function RootLayout({
         <html lang="ja">
             <body className={inter.className}>
                 {/* プロバイダ */}
-                <UserProvider>
-                    <SocketProvider>
+                <SocketProvider>
                     {children}
-                    </SocketProvider>
-                </UserProvider>
+                </SocketProvider>
             </body>
         </html>
     );
