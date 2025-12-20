@@ -6,7 +6,7 @@ import { useUser } from "./useUser";
 // jsonのメッセージの型
 type JsonMessage = {
     type: string;   // "move","drop"などのイベント名
-    payload?: any;
+    payload?: unknown;
 }
 
 // ソケットのコンテキスト型を定義
