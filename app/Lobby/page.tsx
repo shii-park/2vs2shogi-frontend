@@ -43,13 +43,15 @@ export default function Page() {
         {/* ボタン類 */}
         <div className={style.buttonsContainer}>
           <OutlineButtton
-            label='？'
+            label='?'
             onClick={handleHowtoPlayButton}
           />
-          <WhiteButton
-            label='対局を開始'
-            onClick={handleMatchButton}
+          <div className={style.matchingButton}>
+            <WhiteButton
+              label='対局を開始'
+              onClick={handleMatchButton}
           />
+          </div>
         </div>
       </div>
     </div>

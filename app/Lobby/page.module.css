@@ -2,15 +2,17 @@
     width: 100vw;
     height: 100vh;
     
+    padding: 100px 100px;
     display: grid;
+
+    box-sizing: border-box;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr auto;
 
     grid-template-areas: 
         "board info"
         "board controls";
 
-    padding: 20px;
     gap: 20px;
 }
 
@@ -30,7 +32,45 @@
 .matchingControls {
   grid-area: controls;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end; /* 右寄せ */
+  flex-direction: column; /* 縦並びに戻す */
+  align-items: flex-end;   /* 右寄せ */
   justify-content: flex-end;
+  gap: 15px;              /* ユーザー名とボタンの間の隙間 */
+}
+
+.buttonsContainer {
+    display: flex;
+    align-items: center;
+}
+
+.matchingButton{
+  padding-left: 20px;
+}
+
+.EnPanel{
+  font-size: 2.5rem;
+  font-weight: bold;
+  padding-right: 20px;
+}
+
+.mainPanel{
+  font-size: 15rem;
+  font-family: sans-serif; /* 将棋のフォントを棋士名入力欄と同じにする */
+  font-weight: bold; /* sans-serifを太字にする */
+  line-height: 1.1;
+}
+
+.subPanel{
+  font-size: 4rem;
+  font-weight: bold;
+  line-height: 1;
+  padding-right: 10px;
+}
+
+.userName{
+  font-size: 8rem;
+  font-weight: bold;
+  line-height: 1;
+  padding-right: 10px;
+  padding-bottom: 20px;
 }

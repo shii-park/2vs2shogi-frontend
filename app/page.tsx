@@ -16,7 +16,7 @@ export default function Page() {
     // 名前が空なら何もしない
     if (!userName.trim()) return;
     // Contextにすでに保存されているので、単にページ遷移するだけでOK
-    router.push("/lobby");
+    router.push("/Lobby");
   };
 
   return (
