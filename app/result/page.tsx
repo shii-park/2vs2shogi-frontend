@@ -14,12 +14,14 @@ export default function Result() {
   const outcomeMessage = outcome === "win" ? "勝利" : "敗北";
 
   // 勝敗から勝利チーム・敗北チームユーザー名取得
-  const myTeamUsersName = [localStorage.getItem("userName"), localStorage.getItem("allyName")]
-  const oppTeamUsersName = [localStorage.getItem("oppName1"), localStorage.getItem("oppName2")]
+  const [myTeamUsersName, setMyTeamUsersName] = useState<string[]>([]);
+  const [oppTeamUsersName, setOppTeamUsersName] = useState<string[]>([]);
 
   const [message, setMessage] = useState("");
   // 定型文
   useEffect(() => {
+    setMyTeamUsersName([localStorage.getItem("userName") || "", localStorage.getItem("allyName") || ""]);
+    setOppTeamUsersName([localStorage.getItem("oppName1") || "", localStorage.getItem("oppName2") || ""]);
 
     // 定型文
     const winMessage = [
@@ -53,10 +55,10 @@ export default function Result() {
   }
 
   return (
-    <div className={`${style.containar}`}>
+    <div className={`${style.container}`}>
       <div className={`${style.topContainer}`}>
         <div className={`${style.resultLabels}`}>
-          <div className={`${style.subLabel}`}>relust</div>
+          <div className={`${style.subLabel}`}>Result</div>
           <div className={`${style.outcome}`}>{outcomeMessage}</div>
         </div>
         <div className={`${style.myUsersName}`}>
@@ -66,10 +68,12 @@ export default function Result() {
         <div className={`${style.message}`}>{message}</div>
       </div>
       <div className={`${style.bottomContainer}`}>
-        <div className={`${style.oppLabel}`}>対局相手</div>
-        <div className={`${style.oppUsersName}`}>
-          <div className={`${style.userName}`}>{oppTeamUsersName[0]}</div>
-          <div className={`${style.userName}`}>{oppTeamUsersName[1]}</div>
+        <div className={style.oppInfo}>
+          <div className={`${style.oppLabel}`}>対局相手</div>
+          <div className={`${style.oppUsersName}`}>
+            <div className={`${style.userName}`}>{oppTeamUsersName[0]}</div>
+            <div className={`${style.userName}`}>{oppTeamUsersName[1]}</div>
+          </div>
         </div>
         <div className={`${style.buttonContainer}`}>
           <WhiteButton
