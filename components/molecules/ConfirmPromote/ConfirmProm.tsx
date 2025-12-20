@@ -1,6 +1,6 @@
 import  "./ConfirmProm.css";
 import { OutlineButtton } from "@/components/atoms/OutlineButton/OutlineButton";
-import { WhiteButton } from "@/components/atoms/WhiteButton/white-button";
+import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 
 
 type Props = {
