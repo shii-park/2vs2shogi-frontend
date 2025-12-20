@@ -78,14 +78,17 @@ export default function Game() {
         localStorage.setItem("allyName", "test1");
         localStorage.setItem("oppName1", "test2");
         localStorage.setItem("oppName2", "test3");
+    }, [])
 
+    // localStorageから値を取得してstateを更新
+    useEffect(() => {
         setPlayerNames({
             userName: localStorage.getItem("userName") || "",
             allyName: localStorage.getItem("allyName") || "",
             oppName1: localStorage.getItem("oppName1") || "",
             oppName2: localStorage.getItem("oppName2") || "",
         });
-    }, [])
+    }, []);
 
     return (
         <div className={styles.gameField}>
