@@ -1,7 +1,7 @@
 'use client';
 import { createContext, ReactNode, useCallback, useContext, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { useUser } from "./useUser";
+import { useMatchUsers } from "./useUser";
 
 // jsonのメッセージの型
 type JsonMessage = {
@@ -28,7 +28,7 @@ export const SocketProvider = ({children}: { children: ReactNode}) => {
     const  [shouldConnect, setShouldConnect] = useState(false);
 
     // 接続時に送信するためユーザー名取得
-    const { userName } = useUser();
+    const { userName } = useMatchUsers();
 
     // URL生成を関数化(useWebSocketに引数で渡すため)
     const getSocketUrl = useCallback(() => {
