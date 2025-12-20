@@ -79,9 +79,9 @@ export default function Game() {
             <div className={styles.gameLayout}>
 
                 <div className={`${styles.sidebar} ${styles.leftSidebar}`}>
-                    <div className="oppName">
-                        <div className="text">{localStorage.getItem("oppName1")}</div>
-                        <div className="text">{localStorage.getItem("oppName2")}</div>
+                    <div className={styles.playerName}>
+                        <div>{localStorage.getItem("oppName1")}</div>
+                        <div>{localStorage.getItem("oppName2")}</div>
                     </div>
 
                     <HandPieceDraw
@@ -138,9 +138,9 @@ export default function Game() {
                         myTeam={myTeam}
                         clickHandPiece={clickHandPiece}
                     />
-                    <div className="oppName">
-                        <div className="text">{localStorage.getItem("userName")}</div>
-                        <div className="text">{localStorage.getItem("allyName")}</div>
+                    <div className={styles.playerName}>
+                        <div>{localStorage.getItem("userName")}</div>
+                        <div>{localStorage.getItem("allyName")}</div>
                     </div>
                 </div>
 
