@@ -5,10 +5,12 @@
     color: #C59E70;
     padding: 0.25rem 2rem;
     background-color: #fff;
-    border-color: #fff;
+    border: 2px #fff;
     border-radius: 2rem;
 
     cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.1s, background-color 0.2s;
 }
 
 button:hover {

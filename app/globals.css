@@ -2,3 +2,7 @@ body {
     background-image: url('../public/images/background.png');
     background-size: cover;
 }
+
+.text {
+    color: #fff;
+}

@@ -1,0 +1,142 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    /* 背景色(仮) */
+    color: white;
+    padding: 100px 100px;
+    /* 全体の余白 */
+    box-sizing: border-box;
+
+    /* --- グリッドレイアウト定義 --- */
+    display: grid;
+    /* 列定義: 
+     1列目(左): 最小400px, 画面が広いときは最大50%まで広がる 
+     2列目(右): 残りのスペース全て
+  */
+    grid-template-columns: minmax(400px, 50%) 1fr;
+
+    /* 行定義:
+     1行目(上): 残りの高さを全て使う (タイトルを中央配置するため)
+     2行目(下): コンテンツの高さに合わせる (入力フォーム用)
+  */
+    grid-template-rows: 1fr auto;
+
+    /* エリアの名前付け（配置を分かりやすくするため） */
+    grid-template-areas:
+    "titleArea gridArea"
+    "inputArea inputArea";
+}
+
+/* --- タイトルエリア (左上) --- */
+.titleArea {
+    grid-area: titleArea;
+
+    /* 上下中央揃えの設定 */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* 縦方向の中央揃えを解除し、パディング等で位置を調整できるように変更 */
+    justify-content: flex-start;
+    
+    /* 位置微調整用のパディング (お好みの値に変更してください) */
+    padding-top: 0vh;
+    padding-left: 0;
+
+    align-items: flex-start;
+    /* 左寄せ */
+}
+
+.subTitle {
+    font-size: 4rem;
+    font-weight: bold;
+    line-height: 1;
+    padding-left: 10px;
+}
+
+.mainTitle {
+    font-size: 15rem;
+    font-family: sans-serif; /* 将棋のフォントを棋士名入力欄と同じにする */
+    font-weight: bold; /* sans-serifを太字にする */
+    line-height: 1.1;
+}
+
+.EnTitle {
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding-left: 20px;
+
+}
+
+/* --- グリッド画像エリア (右側全体) --- */
+.gridArea {
+    grid-area: gridArea;
+
+    display: flex;
+    justify-content: flex-end; /* 右寄せ */
+    align-items: flex-start;   /* 上寄せ */
+    
+    overflow: hidden;
+    /* はみ出し防止 */
+}
+
+.gridSvg {
+    /* 固定サイズにして拡大縮小を防ぐ */
+    width: 800px;
+    height: 800px; 
+    
+    /* 縮小・変形の基準を右上に設定 */
+    transform-origin: right top;
+    
+    /* 必要に応じてパディングやマージンで微調整 */
+    /* margin-top: -100px; などで画面外にはみ出させる演出も可能 */
+}
+
+
+/* --- 入力フォームエリア (左下) --- */
+.inputArea {
+    grid-area: inputArea;
+
+    /* 最小の高さ設定 (不自然に潰れるのを防ぐ) */
+    min-height: 120px;
+
+    display: flex;
+    align-items: center;
+    /* 垂直方向中央 */
+    justify-content: left;
+    gap: 20px;
+    /* 入力欄とボタンの間隔 */
+
+    white-space: nowrap;
+}
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  
+  /* ★重要: 中身の幅に合わせる設定 */
+  width: fit-content;
+  
+  /* 線と余白のデザイン */
+  border-bottom: 3px solid rgba(255, 255, 255);
+  padding-bottom: 10px; /* 線とボタンの間の隙間 */
+  padding-right: 20px;  /* (お好みで) 線の右側を少し伸ばすなら追加 */
+}
+
+/* レスポンシブ対応 (スマホなど画面が狭すぎる場合) */
+@media (max-width: 800px) {
+    .container {
+        grid-template-columns: 1fr;
+        /* 1列にする */
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+            "titleArea"
+            "gridArea"
+            "inputArea";
+        /* padding: 20px;   */
+    }
+
+    .mainTitle {
+        font-size: 5rem;
+        /* スマホでは少し小さく */
+    }
+}
