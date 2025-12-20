@@ -2,13 +2,14 @@ import { GamePhase, Team } from "@/types/GameStates";
 import { BoardMapType } from "@/types/MapType";
 import { PieceType } from "@/types/PieceType";
 import { getDroppableMasu, getMovableMasu, mustPromote } from "@/utils/BoardMapUtils";
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 
 export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
     const [currentTurn, setCurrentTurn] = useState<Team>("first");  // 現在の手番
     const [phase, setPhase] = useState<GamePhase>(
         myTeam === "first" ? "selecting_piece" : "waiting_opp"
     );  // 現在のフェーズ
+    const [prevPhase, setPrevPhase] = useState<GamePhase>(myTeam === "first" ? "selecting_piece" : "waiting_opp");  //前回のフェーズ(投了キャンセル用)
     const [selectedPiece, setselectedPiece] = useState<PieceType | null>(null); //選択している駒
     const [selectedPos, setSelectedPos] = useState<{ x: number, y: number } | null>(null);      //選択している駒の座標
     const [pendingDest, setPendingDest] = useState<{ x: number, y: number } | null>(null);      //移動先の保留
@@ -62,7 +63,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
 
         return () => clearTimeout(id);
     }, [timerCount]);
-    
+
 
     // 盤面の駒選択処理
     const selectBoardPiece = useCallback((piece: PieceType, x: number, y: number) => {
@@ -117,13 +118,13 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
 
         // 移動先を保留にして、フェーズを更新
         setPendingDest({ x, y });
-        setPhase("confirming");
+        setPhase("promoteConfirming");
     }, [phase]);
 
     // 確認画面でのキャンセル
     const cancelPending = useCallback(() => {
         // 確認画面のフェーズであるか
-        if (phase !== "confirming") return;
+        if (phase !== "promoteConfirming") return;
 
         // 移動先を削除し、フェースをマス選択に更新
         setPendingDest(null);
@@ -201,7 +202,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
             return createMoveData(true, { x, y });;
         } else if (isPromotable) {
             // 確認画面を表示 
-            setPhase("confirming");
+            setPhase("promoteConfirming");
             return null;
         } else {
             // 確認画面が不要なときは、送信データを作成して返す
@@ -209,6 +210,17 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         }
 
     }, [phase, movableMasu, cancelSelectedPiece, selectDest, selectedPiece, createMoveData,])
+
+    // 投了確認フェーズ
+    const surrenderConfirm = useCallback(() => {
+        setPrevPhase(phase);
+        setPhase("surrenderConfirming");
+    }, [phase])
+
+    // 投了キャンセル用
+    const surrenderCancel = useCallback(() => {
+        setPhase(prevPhase);
+    }, [prevPhase])
 
     // ターン終了処理
     const turnEnd = useCallback(() => {
@@ -251,6 +263,8 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         handleClickMasu,
         createMoveData,
         setTimerCount,
+        surrenderConfirm,
+        surrenderCancel,
         turnEnd,
         gameEnd,
     }

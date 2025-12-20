@@ -6,9 +6,12 @@ import { useGameState } from "@/hooks/useBoardState";
 import { useGameControl } from "@/hooks/useGameControl";
 import { Team } from "@/types/GameStates";
 import { createHandTestBoardMap, createHandTestHandMap } from "@/utils/handTestInitMap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ConfirmPromote } from "@/components/molecules/ConfirmPromote/ConfirmProm";
 import { createStackTestBoardMap } from "@/utils/stackInitmap";
+import { TurnTimer } from "@/components/atoms/TurnTimer/TurnTimer";
+import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
+import { useMatchUsers } from "@/hooks/useUser";
 
 export default function Game() {
     const myTeam: Team = "first"
@@ -29,7 +32,17 @@ export default function Game() {
         clickHandPiece,
         handleClickMasu,
         createMoveData,
+        surrenderConfirm,
+        surrenderCancel,
     } = useGameControl(myTeam, boardMap);
+
+    // useUserフックからユーザー名取得
+    const {
+        userName,
+        allyName,
+        oppName1,
+        oppName2,
+    } = useMatchUsers()
 
     // バックに送信するための移動データを、GameControlから受け取るためのラッパー関数                                
     const clickMasu = (isPromotable: boolean, x: number, y: number) => {
@@ -55,10 +68,10 @@ export default function Game() {
         }
     };
 
-    useEffect(() => {
-        initializeGameState(createStackTestBoardMap(), new Map());
-        // initializeGameState(createHandTestBoardMap(), createHandTestHandMap());
-    }, [])
+    // 投了処理
+    const handleSurrender = () => {
+        // テスト　後から修正
+    }
 
     return (
         <div className={styles.gameField}>
@@ -66,6 +79,11 @@ export default function Game() {
             <div className={styles.gameLayout}>
 
                 <div className={`${styles.sidebar} ${styles.leftSidebar}`}>
+                    <div className={styles.playerName}>
+                        <div>{oppName1}</div>
+                        <div>{oppName2}</div>
+                    </div>
+
                     <HandPieceDraw
                         handStack={handMap.get(myTeam === "first" ? "second" : "first") ?? []}
                         isAlly={false}
@@ -74,6 +92,15 @@ export default function Game() {
                         myTeam={myTeam}
                         clickHandPiece={clickHandPiece}
                     />
+
+                    <TurnTimer
+                        // テスト　後から修正
+                        isMyTimer={false}
+                        myTeam={myTeam}
+                        currentTurn={myTeam}
+                        currentCount={150}
+                    />
+
                 </div>
 
                 <div className={styles.mainBoard}>
@@ -92,6 +119,17 @@ export default function Game() {
                 </div>
 
                 <div className={`${styles.sidebar} ${styles.rightSidebar}`}>
+                    <WhiteButton
+                        label="投了"
+                        onClick={surrenderConfirm}
+                    />
+                    <TurnTimer
+                        // テスト後から修正
+                        isMyTimer={true}
+                        myTeam={myTeam}
+                        currentTurn={myTeam}
+                        currentCount={150}
+                    />
                     <HandPieceDraw
                         handStack={handMap.get(myTeam) ?? []}
                         isAlly={true}
@@ -100,15 +138,29 @@ export default function Game() {
                         myTeam={myTeam}
                         clickHandPiece={clickHandPiece}
                     />
+                    <div className={styles.playerName}>
+                        <div>{userName}</div>
+                        <div>{allyName}</div>
+                    </div>
                 </div>
 
             </div>
 
             {/* 成りの確認画面を表示 */}
-            {phase === "confirming" && (
+            {phase === "promoteConfirming" && (
                 <ConfirmPromote
+                    label="成りますか？"
                     promClcik={() => promoteConfirm(true)}
                     notPromClick={() => promoteConfirm(false)}
+                />
+            )}
+
+            {/* 投了の確認画面を表示 */}
+            {phase === "surrenderConfirming" && (
+                <ConfirmPromote
+                    label="投了しますか？"
+                    promClcik={() => console.log("a")}
+                    notPromClick={surrenderCancel}
                 />
             )}
         </div>

@@ -1,75 +1,84 @@
-// hooks/useUser.tsx
 "use client";
 
-import { createContext, useContext, useState, ReactNode, useCallback } from "react";
+import { useCallback, useState } from "react";
 
-// 扱うデータの型定義
-type UserContextType = {
-    // 自分のユーザー名
-    userName: string;
-    setUserName: (name: string) => void;
+/* ===== 型定義 ===== */
+type MatchUsers = {
+  userName: string;
+  allyName: string;
+  oppName1: string;
+  oppName2: string;
 
-    // 味方のユーザー名
-    allyName: string;
-    // 敵のユーザー名
-    oppName1: string;
-    oppName2: string;
-
-    // マッチング時に他プレイヤーのユーザー名を一括設定する関数
-    setMatchUserNames: (ally: string, oppName1: string, oppName2: string) => void;
-
-    // ユーザー名をリセットする関数
-    resetUserNames: () => void;
+  setUserName: (name: string) => void;
+  setMatchUserNames: (ally: string, opp1: string, opp2: string) => void;
+  resetUserNames: () => void;
 };
 
-// コンテキスト（保存場所）を作成
-const UserContext = createContext<UserContextType | undefined>(undefined);
+/* ===== localStorage key ===== */
+const storageKeys = {
+  userName: "userName",
+  allyName: "allyName",
+  oppName1: "oppName1",
+  oppName2: "oppName2",
+} as const;
 
-// プロバイダー（全ページにデータを提供するコンポーネント）
-export const UserProvider = ({ children }: { children: ReactNode }) => {
-    // 自分のユーザー名
-    const [userName, setUserName] = useState<string>(""); 
-    
-    // 他のユーザー名 (マッチング成立時に設定)
-    const [allyName, setAllyName] = useState<string>("");
-    const [oppName1, setOppName1] = useState<string>("");
-    const [oppName2, setOppName2] = useState<string>("");
-
-    // マッチング成立時のユーザー名保存関数
-    const setMatchUserNames = useCallback(
-        (ally: string, opp1: string, opp2: string) => {
-        setAllyName(ally);
-        setOppName1(opp1);
-        setOppName2(opp2);
-    }, []);     // 初回のみ実行
-
-    // ユーザー名リセット関数
-    const resetUserNames = useCallback(() => {
-        setAllyName("");
-        setOppName1("");
-        setOppName2("");
-    }, [])
-
-    return (
-        <UserContext.Provider value={{
-            userName,
-            setUserName,
-            allyName,
-            oppName1,
-            oppName2,
-            setMatchUserNames,
-            resetUserNames,
-        }}>
-            {children}
-        </UserContext.Provider>
-    );
-};
-
-// カスタムフック（各ページからデータを取得するための関数）
-export const useUser = () => {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error("useUser must be used within a UserProvider");
+export function useMatchUsers(): MatchUsers {
+  const [users, setUsers] = useState(() => {
+    if (typeof window === "undefined") {
+      return {
+        userName: "",
+        allyName: "",
+        oppName1: "",
+        oppName2: "",
+      };
     }
-    return context;
-};
+
+    return {
+      userName: localStorage.getItem(storageKeys.userName) ?? "",
+      allyName: localStorage.getItem(storageKeys.allyName) ?? "",
+      oppName1: localStorage.getItem(storageKeys.oppName1) ?? "",
+      oppName2: localStorage.getItem(storageKeys.oppName2) ?? "",
+    };
+  });
+
+  const setUserName = useCallback((name: string) => {
+    localStorage.setItem(storageKeys.userName, name);
+    setUsers((prev) => ({ ...prev, userName: name }));
+  }, []);
+
+  const setMatchUserNames = useCallback(
+    (ally: string, opp1: string, opp2: string) => {
+      localStorage.setItem(storageKeys.allyName, ally);
+      localStorage.setItem(storageKeys.oppName1, opp1);
+      localStorage.setItem(storageKeys.oppName2, opp2);
+
+      setUsers((prev) => ({
+        ...prev,
+        allyName: ally,
+        oppName1: opp1,
+        oppName2: opp2,
+      }));
+    },
+    []
+  );
+
+  const resetUserNames = useCallback(() => {
+    Object.values(storageKeys).forEach((key) => {
+      localStorage.removeItem(key);
+    });
+
+    setUsers({
+      userName: "",
+      allyName: "",
+      oppName1: "",
+      oppName2: "",
+    });
+  }, []);
+
+  return {
+    ...users,
+    setUserName,
+    setMatchUserNames,
+    resetUserNames,
+  };
+}

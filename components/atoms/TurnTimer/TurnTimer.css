@@ -2,10 +2,12 @@
     color: #fff;
 
     display: grid;
-    place-items: center;
+    place-items: left;
+    font-weight: bold;
 }
 
 .label {
+    padding-top: 25px;
     font-size: 25px;
 }
 

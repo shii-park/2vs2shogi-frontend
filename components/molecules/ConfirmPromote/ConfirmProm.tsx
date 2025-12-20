@@ -4,11 +4,12 @@ import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 
 
 type Props = {
+    label: string;
     promClcik: () => void;
     notPromClick: () => void;
 }
 
-export function ConfirmPromote ({promClcik, notPromClick}: Props) {
+export function ConfirmPromote ({label, promClcik, notPromClick}: Props) {
     return (
         // 画面全体を覆うオーバーレイ
         <div className="overlay" >
@@ -16,7 +17,7 @@ export function ConfirmPromote ({promClcik, notPromClick}: Props) {
             <div className="dialog">
                 
                 <div className="messageArea">
-                    <p className="text">成りますか？</p>
+                    <p className="text">{label}</p>
                 </div>
 
                 {/* ボタンを置くフッター */}
@@ -24,14 +25,14 @@ export function ConfirmPromote ({promClcik, notPromClick}: Props) {
                     {/* 成らないボタン */}
                     <div className="button notPromote">
                         <WhiteButton
-                            label="成らず"
+                            label="いいえ"
                             onClick={notPromClick}
                         />
                     </div>
                     {/* 成るボタン */}
                     <div className="button promote">
                         <WhiteButton
-                            label="成る"
+                            label="はい"
                             onClick={promClcik}
                         />
                     </div>

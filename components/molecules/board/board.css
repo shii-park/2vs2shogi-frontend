@@ -2,9 +2,9 @@
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(9, 1fr);
-  width: 450px;
-  height: 450px;
-  border: 2px solid #000000;
+  width: 900px;
+  height: 900px;
+  border: 2px solid white;
 
 }
 
@@ -14,11 +14,4 @@
   height: 100%;
   margin: 0;
   padding: 0;
-}
-
-body {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }

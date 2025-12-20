@@ -3,13 +3,17 @@ import style from "./page.module.css"
 import { InputText } from "@/components/atoms/InputText/InputText";
 import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 import { useSocket } from "@/hooks/useSocket";
-import { useUser } from "@/hooks/useUser";
+import { useMatchUsers } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
   const router = useRouter();
   // useUserフックにより、userNameとsetUserName関数を取得
-  const { userName, setUserName } = useUser();
+  const { 
+    userName,
+    setUserName,
+  } = useMatchUsers();
+
   // useSocketフックから、ソケット接続を開始する関数を取得
   const { connectSocket } = useSocket();
 
@@ -39,7 +43,7 @@ export default function Page() {
 
       // セッションIDとユーザー名をローカルストレージに保存
       localStorage.setItem("sessionId", sessionId);
-      localStorage.setItem("userName", userName);
+      setUserName(userName);
 
       // ソケット接続を開始
       connectSocket();
