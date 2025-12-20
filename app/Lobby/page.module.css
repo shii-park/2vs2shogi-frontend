@@ -15,11 +15,6 @@
 
 }
 
-/* 左半分（全体を占める） */
-.gridLayout {
-  grid-area: empty;
-}
-
 .matchInfoPanel {
     grid-area: info;
     display: flex;
@@ -71,4 +66,26 @@
   line-height: 1;
   padding-right: 10px;
   padding-bottom: 20px;
+}
+
+.gridSvg {
+    /* 固定サイズにして拡大縮小を防ぐ */
+    width: 800px;
+    height: 800px; 
+    
+    /* 縮小・変形の基準を右上に設定 */
+    transform-origin: right top;
+    
+    /* 必要に応じてパディングやマージンで微調整 */
+    /* margin-top: -100px; などで画面外にはみ出させる演出も可能 */
+}
+
+.gridArea {
+    grid-area: board;
+    display: flex;
+    justify-content: flex-end; /* 右寄せ */
+    align-items: flex-start;   /* 上寄せ */
+    
+    overflow: hidden;
+    /* はみ出し防止 */
 }

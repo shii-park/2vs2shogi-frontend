@@ -29,7 +29,6 @@ export default function Page() {
       <div className={style.gridLayout}></div>
         {/* --- 右エリア: 格子グリッドデザイン --- */}
         <div className={style.gridArea}>
-          {/* SVGに width:100% を効かせるため、width/height属性は削除しviewBoxのみにするか、CSSで上書きします */}
           <svg
             viewBox="-1.25 -1.25 422.5 422.5"
             className={style.gridSvg}
