@@ -1,9 +1,10 @@
-'use client'
-import style from './page.module.css';
-import { WhiteButton } from '@/components/atoms/WhiteButton/WhiteButton';
-import { OutlineButtton } from '@/components/atoms/OutlineButton/OutlineButton';
-import { useUser } from '@/hooks/useUser';
-import { useRouter } from 'next/navigation';
+"use client";
+import style from "./page.module.css"
+import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
+import { OutlineButtton } from "@/components/atoms/OutlineButton/OutlineButton";
+import { useUser } from "@/hooks/useUser";
+import { useRouter } from "next/navigation";
+
 
 export default function Page() {
   const router = useRouter();
