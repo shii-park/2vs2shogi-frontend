@@ -27,7 +27,7 @@ export const SocketProvider = ({children}: { children: ReactNode}) => {
     // ソケット接続フラグ : コネクションを条件付きで開始するため
     const  [shouldConnect, setShouldConnect] = useState(false);
 
-    const WS_BASE_URL = process.env.NEXT_PUBLIC_WSS_URL || 'ws://localhost:8080';
+    const WS_BASE_URL = 'wss://backend-app.delightfulsand-96b8be6a.japanwest.azurecontainerapps.io';
 
 
     // 接続時に送信するためユーザー名取得

@@ -34,7 +34,7 @@ export default function Page() {
 
     try { 
       // バックのAPIをたたく
-      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+      const API_BASE_URL = 'https://backend-app.delightfulsand-96b8be6a.japanwest.azurecontainerapps.io';
 
       const respone = await fetch(`${API_BASE_URL}/api/auth/register?username=${encodeURIComponent(userName)}`, {
         method: 'POST',
