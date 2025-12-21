@@ -4,7 +4,7 @@ import { PieceMovableVector } from "@/constants/PieceMovableVector"
 import { boardProperty } from "@/constants/BoardProperty"
 import { Team } from "@/types/GameStates"
 
-// indexからボードマップのキーを返す関数
+// position{x, y}からボードマップのキーを返す関数
 export const getBoardKey = (x: number, y: number): BoardKey => { return `${x}_${y}` as BoardKey}
 
 // 駒とmapから、移動可能なマスを計算する関数

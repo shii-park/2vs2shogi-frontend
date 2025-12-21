@@ -4,28 +4,56 @@ import style from './page.module.css';
 import { useMatchUsers } from "@/hooks/useUser";
 import { Team } from '@/types/GameStates';
 import { Popup } from '@/components/atoms/Popup/Popup';
+import { useRouter } from 'next/navigation';
+import { useSocket } from '@/hooks/useSocket';
 
 export default function Matching() {
-    // マッチングした他プレイヤーのユーザー名を保存する変数
-    const [tepAllyName, setTmepAllyName] = useState<string>("----");
-    const [tempOppName1, setTempOppName1] = useState<string>("----");
-    const [tempOppName2, setTempOppName2] = useState<string>("----");
+    const router = useRouter();
+    const { lastJsonMessage } = useSocket();
 
-    // 対局開始のポップアップフラグ
-    const [showGameStartPopup, setShowGameStartPopup] = useState<boolean>(true);
-
-    // useUserフック取得
-    const useNames = useMatchUsers();
-
-    const{
+    // ユーザー名とローカルストレージにセットする関数を取得
+    const {
         userName,
         allyName,
         oppName1,
         oppName2,
-    } = useMatchUsers()
+        setMatchLocalStorage,
+    } = useMatchUsers();
 
-    // ソケット通信（メッセージ受信と送信）
-    // const { sendJsonMessage, lastJsonMessage } = useSocket();
+    // マッチングした他プレイヤーのユーザー名を保存する変数
+    // const [tepAllyName, setTmepAllyName] = useState<string>("----");
+    // const [tempOppName1, setTempOppName1] = useState<string>("----");
+    // const [tempOppName2, setTempOppName2] = useState<string>("----");
+
+    // 対局開始のポップアップフラグ
+    const [showGameStartPopup, setShowGameStartPopup] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (!lastJsonMessage) return;
+
+        if (lastJsonMessage.type === "gameStart") {
+            const payload = lastJsonMessage.payload as {
+                roomId: string;
+                allyName: string;
+                oppName1: string;
+                oppName2: string;
+            };
+            
+            // 2秒後に遷移
+            const timer = setTimeout(() => {
+                setMatchLocalStorage(
+                    payload.roomId,
+                    payload.allyName,
+                    payload.oppName1,
+                    payload.oppName2
+                );
+
+                router.push(`/game/${payload.roomId}`);
+            }, 2000);
+            
+            return () => clearTimeout(timer);
+        }
+    }, [lastJsonMessage, router, setMatchLocalStorage])
 
     // サーバーからのメッセージを監視する
     // プレイヤーの参加処理、ゲーム開始処理
@@ -33,7 +61,7 @@ export default function Matching() {
 
     return (
         <div className={style.container}>
-            
+
             <div className={style.infoPanel}>
                 <div className={`${style.subInfo} text`}>waiting...</div>
                 <div className={`${style.mainInfo} text`}>対局待ち</div>

@@ -5,14 +5,14 @@ import { HandPieceDraw } from "@/components/molecules/hand/handPiece";
 import { useGameState } from "@/hooks/useBoardState";
 import { useGameControl } from "@/hooks/useGameControl";
 import { Team } from "@/types/GameStates";
-import { createHandTestBoardMap, createHandTestHandMap } from "@/utils/handTestInitMap";
 import { useEffect, useState } from "react";
 import { ConfirmPromote } from "@/components/molecules/ConfirmPromote/ConfirmProm";
-import { createStackTestBoardMap } from "@/utils/stackInitmap";
 import { TurnTimer } from "@/components/atoms/TurnTimer/TurnTimer";
 import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 import { useMatchUsers } from "@/hooks/useUser";
 import { Popup } from "@/components/atoms/Popup/Popup";
+import { useSocket } from "@/hooks/useSocket";
+import { createInitialBoardMap } from "@/utils/initialBoardMap";
 
 export default function Game() {
     const myTeam: Team = "first"
@@ -50,6 +50,12 @@ export default function Game() {
         oppName2,
     } = useMatchUsers()
 
+    // ソケット通信関連
+    const {
+        sendJsonMessage,
+        lastJsonMessage,
+    } = useSocket();
+
     // ターン開始のポップアップ監視
     useEffect(() => {
         // ターン開始時だけ表示
@@ -62,6 +68,60 @@ export default function Game() {
         return () => clearTimeout(timer);
     }, [currentTurn]);
 
+    // 駒の一括配置
+    useEffect(() => {
+        initializeGameState(createInitialBoardMap(), new Map() );
+    }, [])
+
+    // ウェブソケット受信
+    useEffect(() => {
+        if (!lastJsonMessage) return;
+            // データ受信処理分岐
+            // type or MessageType
+
+            // MessageType = "moveResult" | "timeUp" | "status"
+
+                // MessageType = "moveResult"
+                    // type = "moveResult" => 駒の移動処理受信(2人正常に処理)
+                    // ペイロール   piece.id piece.type direcrions=[up, up] team.id promote condition=null position=null
+
+                    // type = "capturedPiece" => 駒を取ったときの処理
+                    // ペイロール   piece.id piece.type direcrions=[] team.id promote=false  condition="TAKEN" position=null
+
+                    // type = "dropResult" => 持ち駒を打った処理受信
+                    // ペイロール   piece.id piece.type direcrions=[] team.id promote=false condition=null position={x, y}
+                
+                // MessageType = "timeUp" => 時間切れ処理
+                    // ペイロール   action[{moveResult}]
+
+                // MessageType = "status" => 味方待ち
+                    // ペイロール status=""
+
+            // type = ""
+
+        
+    }, [lastJsonMessage])
+
+    // 移動リクエスト送信
+    const handleMoveSend = () => {
+        sendJsonMessage({
+            type: "MoveRequest",
+            payload: {
+                // ここに書く
+            },
+        });
+    };
+
+    // 持ち駒打ちリクエスト送信
+    const handleDropSend = () => {
+        sendJsonMessage({
+            type: "DropRequest",
+            payload: {
+                // ここに書く
+            },
+        });
+    }
+
     // バックに送信するための移動データを、GameControlから受け取るためのラッパー関数                                
     const clickMasu = (isPromotable: boolean, x: number, y: number) => {
         // GameControlから送信用データを受け取る
@@ -69,8 +129,7 @@ export default function Game() {
         const moveData = handleClickMasu(isPromotable, x, y);
 
         if (moveData) {
-            console.log(moveData);
-            // バックに送信処理
+            
         }
 
         // 確認画面はhandleClickMasu関数のフェーズ変更で自動的に発火する

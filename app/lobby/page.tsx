@@ -4,10 +4,12 @@ import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 import { OutlineButtton } from "@/components/atoms/OutlineButton/OutlineButton";
 import { useMatchUsers } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
+import { useSocket } from "@/hooks/useSocket";
 
 
 export default function Page() {
   const router = useRouter();
+  const { sendJsonMessage } = useSocket();
 
   // コンテキストからユーザー名取得
   const {
@@ -20,11 +22,37 @@ export default function Page() {
   }
 
   // マッチングボタンハンドラ
-  const handleMatchButton = () => {
-    // ここでバックにリクエストを送信
+  const handleMatchButton = async() => {
+    // マッチングリクエストを送信
+    // sendJsonMessage({
+    //   type: "match_request",
+    // });
 
-    router.push("/game");
-  }
+    try {
+      const respone = await fetch(`http://localhost:8080/api/match/join?userId=${localStorage.getItem("sessionId")}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: userName }) // JSONとして送信
+      });
+      // リクエストエラー処理
+      if (!respone.ok) { throw new Error("can't recieve"); }
+
+      // レスポンスからセッションIDを取得
+      const data = await respone.json();  // jsonから変換
+      const gameId = data.gameId;
+      // レスポンスエラー処理
+      if (!gameId) { throw new Error(""); }
+
+      console.log(gameId);
+      // ゲームページに遷移
+      // router.push("");
+    }catch (error) {
+      console.error(error);
+      alert("エラーが発生しました: " + error);
+    }
+  };
 
   return (
     <div className={style.container}>
