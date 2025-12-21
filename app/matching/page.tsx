@@ -5,7 +5,7 @@ import { useMatchUsers } from "@/hooks/useUser";
 import { Team } from '@/types/GameStates';
 import { Popup } from '@/components/atoms/Popup/Popup';
 import { useRouter } from 'next/navigation';
-import { useSocket } from '@/hooks/useSocket';
+import { useSocket } from "@/hooks/useSocket"
 
 export default function Matching() {
     const router = useRouter();

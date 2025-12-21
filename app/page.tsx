@@ -2,7 +2,6 @@
 import style from "./page.module.css"
 import { InputText } from "@/components/atoms/InputText/InputText";
 import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
-import { useSocket } from "@/hooks/useSocket";
 import { useMatchUsers } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -24,46 +23,32 @@ export default function Page() {
     setUserName,
   } = useMatchUsers();
 
-  // useSocketフックから、ソケット接続を開始する関数を取得
-  const { connectSocket } = useSocket();
 
   // セッションIDの取得　->　ws接続
-  const handleStartGame = async() => {
-    // 名前が空の場合は終了
+  const handleStartGame = async () => {
     if (!userName.trim()) return;
 
-    try { 
-      // バックのAPIをたたく
-      const respone = await fetch(`http://localhost:8080/api/auth/register?username=${encodeURIComponent(userName)}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username: userName }) // JSONとして送信
-      });
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/auth/register?username=${encodeURIComponent(userName)}`,
+        { method: "POST" }
+      );
 
-      // リクエストエラー処理
-      if (!respone.ok) { throw new Error("登録に失敗しました"); }
+      if (!response.ok) throw new Error("登録に失敗しました");
 
-      // レスポンスからセッションIDを取得
-      const data = await respone.json();  // jsonから変換
+      const data = await response.json();
       const sessionId = data.sessionId;
-      // レスポンスエラー処理
-      if (!sessionId) { throw new Error("セッションIDが取得できませんでした"); }
+      if (!sessionId) throw new Error("セッションIDが取得できませんでした");
 
-      // セッションIDとユーザー名をローカルストレージに保存
       localStorage.setItem("sessionId", sessionId);
       setUserName(userName);
 
-      // ソケット接続を開始
-      connectSocket();
-
-      // ロビーページに遷移
+      // 👇 WebSocket 接続は Provider に任せる
       router.push("/lobby");
-    
+
     } catch (error) {
       console.error(error);
-      alert("エラーが発生しました: " + error);
+      alert("エラーが発生しました");
     }
   };
 

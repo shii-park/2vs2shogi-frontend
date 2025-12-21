@@ -11,8 +11,8 @@ import { TurnTimer } from "@/components/atoms/TurnTimer/TurnTimer";
 import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 import { useMatchUsers } from "@/hooks/useUser";
 import { Popup } from "@/components/atoms/Popup/Popup";
-import { useSocket } from "@/hooks/useSocket";
 import { createInitialBoardMap } from "@/utils/initialBoardMap";
+import { useSocket } from "@/hooks/useSocket";
 
 export default function Game() {
     const myTeam: Team = "first"
