@@ -7,7 +7,24 @@ export function useGameState() {
     const [boardMap, setBoardMap] = useState<Map<BoardKey, PieceType[]>>(() => new Map());  // 盤面map
     const [handMap, setHandMap] = useState<Map<HandKey, PieceType[]>>(() => new Map())  // 持ち駒map
 
-    // BoardMapの要素のPieceTypeを探し、キーを返す関数
+    // PieceTypeのidとtypeから、Piecetypeを探す関数
+    const findPieceType = (id: PieceType["id"], type: PieceType["type"], prevBoard: Map<BoardKey, PieceType[]>, prevHand: Map<HandKey, PieceType[]>): PieceType | undefined => {
+        // 盤面から探す
+        for (const stack of prevBoard.values()) {
+            const found = stack.find(p => p.id === id && p.type === type);
+            if (found) return found;
+        }
+
+        // 持ち駒から探す
+        for (const stack of prevHand.values()) {
+            const found = stack.find(p => p.id === id && p.type === type);
+            if (found) return found;
+        }
+
+        return undefined;
+    };
+
+    // BoardMapの要素のPieceTypeを探し、キー(座標)を返す関数
     const findBoardKey = (piece: PieceType, prevBoard: Map<BoardKey, PieceType[]>): BoardKey | undefined => {
         const foundEntry = Array.from(prevBoard.entries()).find(([key, stack]) => {
             return stack.length > 0 && stack[stack.length - 1] === piece;
@@ -128,5 +145,6 @@ export function useGameState() {
         Capture,
         Drop,
         initializeGameState,
+        findPieceType,
     };
 }

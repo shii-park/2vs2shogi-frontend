@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import style from './page.module.css';
-import { useUser } from "@/hooks/useUser";
+import { useMatchUsers } from "@/hooks/useUser";
 import { Team } from '@/types/GameStates';
 
 export default function Matching() {
@@ -11,7 +11,14 @@ export default function Matching() {
     const [tempOppName2, setTempOppName2] = useState<string>("----");
 
     // useUserフック取得
-    const useNames = useUser();
+    const useNames = useMatchUsers();
+
+    const{
+        userName,
+        allyName,
+        oppName1,
+        oppName2,
+    } = useMatchUsers()
 
     // ソケット通信（メッセージ受信と送信）
     // const { sendJsonMessage, lastJsonMessage } = useSocket();
@@ -25,20 +32,27 @@ export default function Matching() {
             
             <div className={style.infoPanel}>
                 <div className={`${style.subInfo} text`}>waiting...</div>
-                <div className={`${style.mainInfo} text`}>待機中</div>
+                <div className={`${style.mainInfo} text`}>対局待ち</div>
+            </div>
+
+            {/* ローディングアニメーション */}
+            <div className={style.loadingContainer}>
+                <div className={style.dot}></div>
+                <div className={style.dot}></div>
+                <div className={style.dot}></div>
             </div>
 
             {/* ユーザー名表示 */}
             <div className={style.userNamesContainer}>
                 {/* 自チーム */}
                 <div className={style.allyUserNames}>
-                    <div className={`${style.userName} text`}>{useNames.userName}</div>
-                    <div className={`${style.userName} text`}>{tepAllyName}</div>
+                    <div className={`${style.userName} text`}>{userName}</div>
+                    <div className={`${style.userName} text`}>{allyName}</div>
                 </div>
                 {/* 相手チーム */}
                 <div className={style.oppUserNames}>
-                    <div className={`${style.userName} text`}>{tempOppName1}</div>
-                    <div className={`${style.userName} text`}>{tempOppName2}</div>
+                    <div className={`${style.userName} text`}>{oppName1}</div>
+                    <div className={`${style.userName} text`}>{oppName2}</div>
                 </div>
             </div>
         </div>
