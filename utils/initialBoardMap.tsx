@@ -12,7 +12,7 @@ export const createInitialBoardMap = (): BoardMapType => {
     const createPiece = (x: number, y: number, type: string, team: "first" | "second"): PieceType => {
         return {
             id: `${team}-${type}-${x}-${y}`, // ユニークID
-            type: type as any, // 型エラーが出る場合は as PieceType["type"] などでキャストしてください
+            type: type as PieceType["type"], 
             team: team,
             // 金と王以外は成れる
             promotable: type !== "gold" && type !== "king",
