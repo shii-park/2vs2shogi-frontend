@@ -1,14 +1,18 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import style from './page.module.css';
 import { useMatchUsers } from "@/hooks/useUser";
 import { Team } from '@/types/GameStates';
+import { Popup } from '@/components/atoms/Popup/Popup';
 
 export default function Matching() {
     // マッチングした他プレイヤーのユーザー名を保存する変数
     const [tepAllyName, setTmepAllyName] = useState<string>("----");
     const [tempOppName1, setTempOppName1] = useState<string>("----");
     const [tempOppName2, setTempOppName2] = useState<string>("----");
+
+    // 対局開始のポップアップフラグ
+    const [showGameStartPopup, setShowGameStartPopup] = useState<boolean>(true);
 
     // useUserフック取得
     const useNames = useMatchUsers();
@@ -25,7 +29,7 @@ export default function Matching() {
 
     // サーバーからのメッセージを監視する
     // プレイヤーの参加処理、ゲーム開始処理
-
+    // ここで、setShowGameStartPopupをtrueにし、2秒後に/gameに遷移
 
     return (
         <div className={style.container}>
@@ -55,6 +59,13 @@ export default function Matching() {
                     <div className={`${style.userName} text`}>{oppName2}</div>
                 </div>
             </div>
+
+            {/* ターン開始のポップアップを表示 */}
+            {showGameStartPopup && (
+                <Popup
+                    label={`対局を確認`}
+                />
+            )}
         </div>
     );
 }

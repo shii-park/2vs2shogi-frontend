@@ -12,6 +12,7 @@ import { createStackTestBoardMap } from "@/utils/stackInitmap";
 import { TurnTimer } from "@/components/atoms/TurnTimer/TurnTimer";
 import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 import { useMatchUsers } from "@/hooks/useUser";
+import { Popup } from "@/components/atoms/Popup/Popup";
 
 export default function Game() {
     const myTeam: Team = "first"
@@ -27,6 +28,8 @@ export default function Game() {
         selectedPos,
         movableMasu,
         isSurrender,
+        showTurnPopup,
+        currentTurn,
         cancelSelectedPiece,
         selectDest,
         clickBoardPiece,
@@ -36,6 +39,7 @@ export default function Game() {
         surrenderConfirm,
         surrenderCancel,
         setIsSurrender,
+        setShowTurnPopup,
     } = useGameControl(myTeam, boardMap);
 
     // useUserフックからユーザー名取得
@@ -45,6 +49,18 @@ export default function Game() {
         oppName1,
         oppName2,
     } = useMatchUsers()
+
+    // ターン開始のポップアップ監視
+    useEffect(() => {
+        // ターン開始時だけ表示
+        setShowTurnPopup(true);
+
+        const timer = setTimeout(() => {
+            setShowTurnPopup(false);
+        }, 2000); // 2秒表示
+
+        return () => clearTimeout(timer);
+    }, [currentTurn]);
 
     // バックに送信するための移動データを、GameControlから受け取るためのラッパー関数                                
     const clickMasu = (isPromotable: boolean, x: number, y: number) => {
@@ -59,6 +75,11 @@ export default function Game() {
 
         // 確認画面はhandleClickMasu関数のフェーズ変更で自動的に発火する
     };
+
+    // ターン開始のダイアログ表示関数
+    const handleTurnPopip = () => {
+
+    }
 
     // 確認画面の処理
     const promoteConfirm = (promote: boolean) => {
@@ -152,6 +173,12 @@ export default function Game() {
                 </div>
 
             </div>
+            {/* ターン開始のポップアップを表示 */}
+            {showTurnPopup && (
+                <Popup
+                    label={`${currentTurn === myTeam ? "あなた" : "相手"}の手番です`}
+                />
+            )}
 
             {/* 成りの確認画面を表示 */}
             {phase === "promoteConfirming" && (
