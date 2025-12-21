@@ -4,10 +4,12 @@ import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 import { OutlineButtton } from "@/components/atoms/OutlineButton/OutlineButton";
 import { useMatchUsers } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
+import { useSocket } from "@/hooks/useSocket";
 
 
 export default function Page() {
   const router = useRouter();
+  const { sendJsonMessage } = useSocket();
 
   // コンテキストからユーザー名取得
   const {
@@ -21,10 +23,13 @@ export default function Page() {
 
   // マッチングボタンハンドラ
   const handleMatchButton = () => {
-    // ここでバックにリクエストを送信
-
-    router.push("/game");
-  }
+    // マッチングリクエストを送信
+    sendJsonMessage({
+      type: "match_request",
+    });
+    // ゲームページに遷移
+    router.push("/matching");
+  };
 
   return (
     <div className={style.container}>
