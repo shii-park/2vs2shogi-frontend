@@ -22,13 +22,36 @@ export default function Page() {
   }
 
   // マッチングボタンハンドラ
-  const handleMatchButton = () => {
+  const handleMatchButton = async() => {
     // マッチングリクエストを送信
-    sendJsonMessage({
-      type: "match_request",
-    });
-    // ゲームページに遷移
-    router.push("/matching");
+    // sendJsonMessage({
+    //   type: "match_request",
+    // });
+
+    try {
+      const respone = await fetch(`http://localhost:8080/api/match/join?userId=${localStorage.getItem("sessionId")}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: userName }) // JSONとして送信
+      });
+      // リクエストエラー処理
+      if (!respone.ok) { throw new Error("can't recieve"); }
+
+      // レスポンスからセッションIDを取得
+      const data = await respone.json();  // jsonから変換
+      const gameId = data.gameId;
+      // レスポンスエラー処理
+      if (!gameId) { throw new Error(""); }
+
+      console.log(gameId);
+      // ゲームページに遷移
+      // router.push("");
+    }catch (error) {
+      console.error(error);
+      alert("エラーが発生しました: " + error);
+    }
   };
 
   return (
