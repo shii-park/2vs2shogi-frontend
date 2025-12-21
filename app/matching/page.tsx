@@ -32,7 +32,7 @@ export default function Matching() {
             
             <div className={style.infoPanel}>
                 <div className={`${style.subInfo} text`}>waiting...</div>
-                <div className={`${style.mainInfo} text`}>待機中</div>
+                <div className={`${style.mainInfo} text`}>対局待ち</div>
             </div>
 
             {/* ローディングアニメーション */}
