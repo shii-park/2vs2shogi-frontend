@@ -35,6 +35,13 @@ export default function Matching() {
                 <div className={`${style.mainInfo} text`}>待機中</div>
             </div>
 
+            {/* ローディングアニメーション */}
+            <div className={style.loadingContainer}>
+                <div className={style.dot}></div>
+                <div className={style.dot}></div>
+                <div className={style.dot}></div>
+            </div>
+
             {/* ユーザー名表示 */}
             <div className={style.userNamesContainer}>
                 {/* 自チーム */}
