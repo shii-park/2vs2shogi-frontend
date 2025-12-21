@@ -3,13 +3,27 @@ import style from "./page.module.css"
 import { InputText } from "@/components/atoms/InputText/InputText";
 import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
 import { useSocket } from "@/hooks/useSocket";
-import { useUser } from "@/hooks/useUser";
+import { useMatchUsers } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
+
+  // マウント判定変数
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  // useEffectでマウント完了時にsetMounted関数を呼ぶ
+  useEffect (() => {
+    setMounted(true);
+  }, []);
+
   // useUserフックにより、userNameとsetUserName関数を取得
-  const { userName, setUserName } = useUser();
+  const { 
+    userName,
+    setUserName,
+  } = useMatchUsers();
+
   // useSocketフックから、ソケット接続を開始する関数を取得
   const { connectSocket } = useSocket();
 
@@ -39,7 +53,7 @@ export default function Page() {
 
       // セッションIDとユーザー名をローカルストレージに保存
       localStorage.setItem("sessionId", sessionId);
-      localStorage.setItem("userName", userName);
+      setUserName(userName);
 
       // ソケット接続を開始
       connectSocket();
@@ -53,6 +67,8 @@ export default function Page() {
     }
   };
 
+  if (!mounted)return;
+  
   return (
     <div>
       <main className={style.container}>

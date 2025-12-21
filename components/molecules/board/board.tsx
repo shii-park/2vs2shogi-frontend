@@ -54,8 +54,8 @@ export function BoardDraw({ BoardMap, phase, selectedPiece, selectedPos, movable
     // 座標ループ用配列
     const board = [];
 
-    for (let y = boardProperty.height; y >= 0; y--) {
-        for (let x = 0; x <= boardProperty.width; x++) {
+    for (let y = boardProperty.height; y >= 1; y--) {
+        for (let x = 1; x <= boardProperty.width; x++) {
 
             //ここにboardmapのキー`x_y`からスタック取得
             const cellKey: BoardKey = getBoardKey(x, y);

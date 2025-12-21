@@ -36,3 +36,10 @@
 .rightSidebar {
     justify-content: flex-end;   /* 自分は下寄せ */
 }
+
+.playerName {
+    color: white;
+    font-weight: bold;
+    font-size: 3rem;
+    margin-bottom: 5px;
+}

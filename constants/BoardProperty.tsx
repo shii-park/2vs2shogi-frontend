@@ -5,6 +5,6 @@ type BoardProperty = {
 };
 
 export const boardProperty: BoardProperty = {
-    width: 8,
-    height: 8,
+    width: 9,
+    height: 9,
 }
