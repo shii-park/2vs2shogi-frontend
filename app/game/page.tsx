@@ -6,11 +6,12 @@ import { useGameState } from "@/hooks/useBoardState";
 import { useGameControl } from "@/hooks/useGameControl";
 import { Team } from "@/types/GameStates";
 import { createHandTestBoardMap, createHandTestHandMap } from "@/utils/handTestInitMap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ConfirmPromote } from "@/components/molecules/ConfirmPromote/ConfirmProm";
 import { createStackTestBoardMap } from "@/utils/stackInitmap";
 import { TurnTimer } from "@/components/atoms/TurnTimer/TurnTimer";
 import { WhiteButton } from "@/components/atoms/WhiteButton/WhiteButton";
+import { useMatchUsers } from "@/hooks/useUser";
 
 export default function Game() {
     const myTeam: Team = "first"
@@ -25,6 +26,7 @@ export default function Game() {
         selectedPiece,
         selectedPos,
         movableMasu,
+        isSurrender,
         cancelSelectedPiece,
         selectDest,
         clickBoardPiece,
@@ -33,7 +35,16 @@ export default function Game() {
         createMoveData,
         surrenderConfirm,
         surrenderCancel,
+        setIsSurrender,
     } = useGameControl(myTeam, boardMap);
+
+    // useUserフックからユーザー名取得
+    const {
+        userName,
+        allyName,
+        oppName1,
+        oppName2,
+    } = useMatchUsers()
 
     // バックに送信するための移動データを、GameControlから受け取るためのラッパー関数                                
     const clickMasu = (isPromotable: boolean, x: number, y: number) => {
@@ -61,17 +72,12 @@ export default function Game() {
 
     // 投了処理
     const handleSurrender = () => {
+        setIsSurrender(true);
+        surrenderCancel();
+
+        // バックに送信処理
         // テスト　後から修正
     }
-
-    useEffect(() => {
-        initializeGameState(createStackTestBoardMap(), new Map());
-        // initializeGameState(createHandTestBoardMap(), createHandTestHandMap());
-        localStorage.setItem("userName", "myUserName");
-        localStorage.setItem("allyName", "test1");
-        localStorage.setItem("oppName1", "test2");
-        localStorage.setItem("oppName2", "test3");
-    }, [])
 
     return (
         <div className={styles.gameField}>
@@ -79,9 +85,9 @@ export default function Game() {
             <div className={styles.gameLayout}>
 
                 <div className={`${styles.sidebar} ${styles.leftSidebar}`}>
-                    <div className="oppName">
-                        <div className="text">{localStorage.getItem("oppName1")}</div>
-                        <div className="text">{localStorage.getItem("oppName2")}</div>
+                    <div className={styles.playerName}>
+                        <div>{oppName1}</div>
+                        <div>{oppName2}</div>
                     </div>
 
                     <HandPieceDraw
@@ -120,8 +126,9 @@ export default function Game() {
 
                 <div className={`${styles.sidebar} ${styles.rightSidebar}`}>
                     <WhiteButton
-                        label="投了"
+                        label={isSurrender ? "投了済み" : "投了"}
                         onClick={surrenderConfirm}
+                        disabled={isSurrender}
                     />
                     <TurnTimer
                         // テスト後から修正
@@ -138,9 +145,9 @@ export default function Game() {
                         myTeam={myTeam}
                         clickHandPiece={clickHandPiece}
                     />
-                    <div className="oppName">
-                        <div className="text">{localStorage.getItem("userName")}</div>
-                        <div className="text">{localStorage.getItem("allyName")}</div>
+                    <div className={styles.playerName}>
+                        <div>{userName}</div>
+                        <div>{allyName}</div>
                     </div>
                 </div>
 
@@ -159,7 +166,7 @@ export default function Game() {
             {phase === "surrenderConfirming" && (
                 <ConfirmPromote
                     label="投了しますか？"
-                    promClcik={() => console.log("a")}
+                    promClcik={handleSurrender}
                     notPromClick={surrenderCancel}
                 />
             )}
