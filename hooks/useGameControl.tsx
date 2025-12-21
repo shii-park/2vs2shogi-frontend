@@ -16,6 +16,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
     const [movableMasu, setMovableMasu] = useState<[number, number][]>([]); // 移動可能マス配列
     const [timerCount, setTimerCount] = useState<number | null>(null);  // タイマーの秒数(ms)
     const oneSeconds = 1000;   // 1秒の定義
+    const [showTurnPopup, setShowTurnPopup] = useState<boolean>(false);     // ターン開始のポップアップ表示
     const [isSurrender, setIsSurrender] = useState<boolean>(false); // 投了したかどうか(2人投了するまでゲーム終了しないため)
 
     // 状態クリア関数
@@ -255,6 +256,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         movableMasu,
         timerCount,
         isSurrender,
+        showTurnPopup,
         isMyTurn: currentTurn === myTeam,
 
         cancelSelectedPiece,
@@ -268,6 +270,7 @@ export function useGameControl(myTeam: Team, BoardMap: BoardMapType) {
         surrenderConfirm,
         surrenderCancel,
         setIsSurrender,
+        setShowTurnPopup,
         turnEnd,
         gameEnd,
     }
