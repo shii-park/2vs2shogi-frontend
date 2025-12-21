@@ -1,0 +1,75 @@
+.container {
+    display: grid;
+    justify-items: center;
+    padding: 40px 0;
+    width: 100%;
+}
+
+
+.subInfo {
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding-left: 20px;
+}
+.mainInfo {
+    font-size: 15rem;
+    font-family: sans-serif; /* 将棋のフォントを棋士名入力欄と同じにする */
+    font-weight: bold; /* sans-serifを太字にする */
+    line-height: 1.1;
+}
+
+.userNamesContainer {
+    display: flex;
+    justify-content: center;
+    padding: 100px 0;
+    width: 100%;
+}
+
+.userName {
+    font-size: 80px;
+    padding: 20px 20px;
+    font-weight: bold;
+}
+
+.allyUserNames{
+    border-right: 4px solid white;
+    text-align: right;
+    width: 50vw;
+}
+.oppUserNames{
+    border-left: 4px solid white;
+    width: 50%;
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding-top: 50px;
+}
+
+.dot {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    animation: blink 1.4s infinite both;
+}
+
+.dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes blink {
+    0%, 80%, 100% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+}
