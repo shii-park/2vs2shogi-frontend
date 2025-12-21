@@ -34,7 +34,9 @@ export default function Page() {
 
     try { 
       // バックのAPIをたたく
-      const respone = await fetch(`http://localhost:8080/api/auth/register?username=${encodeURIComponent(userName)}`, {
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+
+      const respone = await fetch(`${API_BASE_URL}/api/auth/register?username=${encodeURIComponent(userName)}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

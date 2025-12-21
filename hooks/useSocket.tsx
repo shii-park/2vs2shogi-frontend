@@ -27,6 +27,9 @@ export const SocketProvider = ({children}: { children: ReactNode}) => {
     // ソケット接続フラグ : コネクションを条件付きで開始するため
     const  [shouldConnect, setShouldConnect] = useState(false);
 
+    const WS_BASE_URL = process.env.NEXT_PUBLIC_WSS_URL || 'ws://localhost:8080';
+
+
     // 接続時に送信するためユーザー名取得
     const { userName } = useMatchUsers();
 
@@ -40,7 +43,7 @@ export const SocketProvider = ({children}: { children: ReactNode}) => {
             throw new Error("sessionId が存在しません");
         }
         
-        return `ws://localhost:8080/ws/game?${encodeURIComponent(sessionId)}`;
+        return `${WS_BASE_URL}/ws/game?${encodeURIComponent(sessionId)}`;
     }, [shouldConnect, userName])
 
     // useWebSocketによってリクエストを送信
