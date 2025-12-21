@@ -1,4 +1,4 @@
-import  "./TurnPopup.css";
+import  "./Popup.css";
 
 
 type Props = {
